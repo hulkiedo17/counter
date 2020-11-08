@@ -1,0 +1,5 @@
+plc - program line counter
+
+TODO:
+- make config file (like rc or .conf) to use some variables.
+- make templates for files and directories (like ".c:.h:.sh:.in:.mk")
