@@ -1,12 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <dirent.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include <ctype.h>
 #include "../include/check.h"
+#include "../include/misc.h"
 
-static char* concat_name_and_path(char *path, char *name)
+bool detail_flag = false;
+bool recursion_flag = true;
+
+/* STATIC FUNCTIONS */
+
+static char* concat_name_and_path(const char *path, char *name)
 {
     size_t len = 0;
     char* full_path = NULL;
@@ -14,7 +22,7 @@ static char* concat_name_and_path(char *path, char *name)
     len = strlen(path) + strlen(name) + 2;
     full_path = malloc(len * sizeof(char));
     if(full_path == NULL) {
-        fprintf(stderr, "concat_name_and_path(): malloc() failed\n");
+        fail(stderr, "concat_name_and_path(): memory allocation error (malloc() failed)\n");
         return NULL;
     }
 
@@ -24,104 +32,117 @@ static char* concat_name_and_path(char *path, char *name)
     return full_path;
 }
 
-static long long count_lines_in_file(char *path, int debug)
+static long long count_lines_in_file(const char *path)
 {
     FILE *fp = NULL;
     long long count = 0;
-    int c, char_flag;
+    int c;
+	bool char_flag = false;
 
     if(path == NULL) {
-        fprintf(stderr, "count_lines_in_file(): NULL path pointer (in arguments)\n");
+        fail(stderr, "count_lines_in_file(): the function argument was passed the NULL value (const char *path)\n");
         return -1;
     }
 
     fp = fopen(path, "r");
     if(fp == NULL) {
-        fprintf(stderr, "count_lines(): NULL file pointer (fopen() failed)\n");
+        fail(stderr, "count_lines(): an error occurred while opening file (%s)\n", path);
         return -1;
     }
 
-    char_flag = 0;
     while((c = fgetc(fp)) != EOF) {
         if(c == '\n') {
             count++;
-            char_flag = 0;
+            char_flag = false;
         } else {
             // if there is no '\n' character in the line, but
             // there are other characters, then count this line
             // by setting the flag
             if(isalnum(c) || ispunct(c) || isspace(c)) {
-                char_flag = 1;
+                char_flag = true;
             }
         }
     }
 
-    if(char_flag == 1)
+    if(char_flag)
         count++;
     
-    if(debug == 1)
+    if(detail_flag)
         printf("%s = %lld\n", path, count);
     
     fclose(fp);
     return count;
 }
 
+/* NON-STATIC FUNCTIONS */
+
 char* get_current_dir(void)
 {
-    char *path = NULL;
+	char *path_ptr = NULL;
+	size_t len;
+	char buffer[BUFSIZ];
 
-    path = getenv("PWD");
-    if(path == NULL) {
-        fprintf(stderr, "get_current_dir(): getenv() failed\n");
-        return NULL;
-    }
+	if(getcwd(buffer, BUFSIZ) == NULL) {
+		fail(stderr, "get_current_dir(): error taking the path to the current directory (getcwd() failed)\n");
+		return NULL;
+	}
 
-    return path;
+	len = strlen(buffer) + 1;
+	path_ptr = malloc(sizeof(char) * len);
+	if(path_ptr == NULL) {
+		fail(stderr, "get_current_dir(): memory allocation error (malloc() failed)\n");
+		return NULL;
+	}
+
+	strncpy(path_ptr, buffer, len);
+
+	return path_ptr;
 }
 
-long long count_lines_in_dir(char *path, int debug, int recursion)
+long long count_lines_in_dir(const char *path)
 {
     DIR *dir = NULL;
     struct dirent *entry = NULL;
     char *full_path = NULL;
     long long count = 0;
-    int dir_skip_count = 0;
+	long long local_count = 0;
 
     if(path == NULL) {
-        fprintf(stderr, "count_lines_in_dir(): NULL dir pointer\n");
+        fail(stderr, "count_lines_in_dir(): the function argument was passed the NULL value (const char *path)\n");
         return -1;
     }
 
     dir = opendir(path);
     if(dir == NULL) {
-        fprintf(stderr, "count_lines_in_dir(): opendir() failed -> (%s)\n", path);
+        fail(stderr, "count_lines_in_dir(): an error occurred while opening directory (%s)", path);
         return -1;
     }
 
     while((entry = readdir(dir)) != NULL) {
-        full_path = concat_name_and_path(path, entry->d_name);
+		full_path = concat_name_and_path(path, entry->d_name);
 
         // if it's a file, then count the lines in it
-        if(is_file(full_path) == 0) {
-            if(is_normal_file(entry->d_name) == 0) {
-                count += count_lines_in_file(full_path, debug);
+        if(is_file(full_path)) {
+            if(is_normal_file(entry->d_name)) {
+				if((local_count = count_lines_in_file(full_path)) != -1)
+					count += local_count;
             }
         }
 
         // if recursion is allowed for dirs, then check
         // the dir if it is
-        if(recursion == 0) {
+        if(recursion_flag) {
             // if it's a dir, then open it and count the 
             // lines in the files there
-            if(is_dir(full_path) == 0) {
-                if(is_normal_dir(entry->d_name) == 0) {
-                    count += count_lines_in_dir(full_path, debug, recursion);
+            if(is_dir(full_path)) {
+                if(is_normal_dir(entry->d_name)) {
+					if((local_count = count_lines_in_dir(full_path)) != -1)
+						count += local_count;
                 }
             }
         }
 
         free(full_path);
-        dir_skip_count++;
     }
 
     closedir(dir);
