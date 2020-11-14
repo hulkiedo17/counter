@@ -13,7 +13,7 @@ VPATH := $(SRC_DIRS)
 HDR := $(wildcard include/%.h)
 OBJ := $(patsubst src/%.c, bin/%.c, $(wildcard src/*.c))
 OBJ := $(OBJ:.c=.o)
-EXEC := plc
+EXEC := counter
 
 .PHONY: all
 all: bin/$(EXEC)
