@@ -1,33 +1,47 @@
 
 ifeq ($(DEBUG), TRUE)
-	CFLAGS := -Wall -Werror -Wextra -pedantic -O0 -g
+	CFLAGS		:= -Wall -Werror -Wextra -pedantic -O0 -g
+	BUILD_DIR	:= bin/debug/
 else
-	CFLAGS := -03
+	CFLAGS		:= -O3
+	BUILD_DIR	:= bin/release/
 endif
-CFLAGS += -std=c99 -MMD
+CFLAGS	+= -std=c99 -MMD
 
-CC := gcc
-LDFLAGS := # none
-SRC_DIRS := src include
-VPATH := $(SRC_DIRS)
-HDR := $(wildcard include/%.h)
-OBJ := $(patsubst src/%.c, bin/%.c, $(wildcard src/*.c))
-OBJ := $(OBJ:.c=.o)
-EXEC := counter
+ifeq ($(V), FALSE)
+	SILENCE = # none
+else
+	SILENCE = @
+endif
+
+CC		?= gcc
+LDFLAGS 	:= # none
+SOURCE_DIRS	:= src include
+VPATH 		:= $(SOURCE_DIRS)
+HEADERS 	:= $(wildcard include/%.h)
+OBJ 		:= $(patsubst src/%.c, $(BUILD_DIR)%.c, $(wildcard src/*.c))
+OBJ 		:= $(OBJ:.c=.o)
+EXEC 		:= counter
+
+SHOW_COMMAND	:= @printf "%-15s%s\n"
+SHOW_CC	:= $(SHOW_COMMAND) "[ $(CC) ]"
+SHOW_CLEAN	:= $(SHOW_COMMAND) "[ CLEAN ]"
 
 .PHONY: all
-all: bin/$(EXEC)
+all: $(BUILD_DIR)$(EXEC)
 
-bin/$(EXEC): $(OBJ)
-	$(CC) $(LDFLAGS) $^ -o $@
+$(BUILD_DIR)$(EXEC): $(OBJ)
+	$(SHOW_CC) $@
+	$(SILENCE)$(CC) $(LDFLAGS) $^ -o $@
 
-bin/%.o: %.c $(HDR)
-	$(CC) $(CFLAGS) -c $< -o $@
+$(BUILD_DIR)%.o: %.c $(HDR)
+	$(SHOW_CC) $@
+	$(SILENCE)$(CC) $(CFLAGS) -c $< -o $@
 
-include $(wildcard bin/*.d)
+include $(wildcard $(BUILD_DIR)*.d)
 
 .PHONY: install
-install: bin/$(EXEC)
+install: $(BUILD_DIR)$(EXEC)
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
 	cp $< $(DESTDIR)$(PREFIX)/bin/$(EXEC)
 
@@ -37,8 +51,10 @@ unistall:
 
 .PHONY: clean
 clean:
-	rm -rf $(OBJ) bin/$(EXEC)
+	$(SHOW_CLEAN) $(BUILD_DIR)
+	$(SILENCE)rm -rf $(OBJ) $(BUILD_DIR)$(EXEC)
 
 .PHONY: cleandep
 cleandep:
-	rm -rf bin/*.d
+	$(SHOW_CLEAN) $(BUILD_DIR)
+	$(SILENCE)rm -rf $(BUILD_DIR)*.d
