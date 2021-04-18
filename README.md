@@ -27,11 +27,14 @@ And yet, you can set a directory for search, though only in a full path (not in 
 
 # options
 
---path <path> - set the specified directory as the default for count(-p).
+--path <path> - set the specified directory as the default for count (-p).
 
 --cur-path - shows current path (-P).
 
---detail - print all files that program counted(-d).
+--detail - print all files that program counted (-d).
 
---no-recursion - don't use recursive access to directories(-R).
+--no-recursion - don't use recursive access to directories (-R).
 
+--help - print help message (-h).
+
+--conf - include to count config files (-c).

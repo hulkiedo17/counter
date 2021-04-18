@@ -1,3 +1,4 @@
 TODO:
-- make config file (like rc or .conf) to use some variables.
-- make templates for files and directories (like ".c:.h:.sh:.in:.mk")
+- add option (like -C) to enable count comments in source files (while without this option the whole file is count)
+- add config file and environment variables(like this: CONFIG_FILES=.git:.sh:.conf, SRC_FILES=.c:.h:.asm:.S)
+- add setting/options to be able to customize the output (like: -O - output filenames, without paths to them)

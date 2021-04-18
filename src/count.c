@@ -11,6 +11,7 @@
 
 bool detail_flag = false;
 bool recursion_flag = true;
+bool config_and_shell_files_flag = false;
 
 /* STATIC FUNCTIONS */
 
