@@ -36,3 +36,13 @@ char* getcw(void)
 
 	return path_ptr;
 }
+
+void help(void) {
+	printf("Usage: counter [options]\n");
+	printf("options:\n");
+	printf("\t-p [path_name] - specifying another directory for counting lines in files\n");
+	printf("\t-P - just show the current path\n");
+	printf("\t-d - show exactly which files are in use and the path to them\n");
+	printf("\t-R - do not use files in nested(recursive) directories\n");
+	printf("\t-h - prints this help message\n");
+}

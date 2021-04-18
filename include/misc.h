@@ -3,5 +3,6 @@
 
 void fail(FILE* out, const char *fmt, ...);
 char* getcw(void);
+void help(void);
 
 #endif

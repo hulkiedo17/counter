@@ -9,15 +9,16 @@ int main(int argc, char **argv)
 {
     int result;
     long long count;
-	bool def_alloc_flag = false;
+	bool def_alloc_flag = true;
     char* def_path = NULL;
 
-    const char* short_opt = "p:PdR";
+    const char* short_opt = "p:PdRh";
     const struct option long_opt[] = {
         {"path", required_argument, NULL, 'p'},
 		{"cur-path", no_argument, NULL, 'P'},
         {"detail", no_argument, NULL, 'd'},
         {"no-recursion", no_argument, NULL, 'R'},
+        {"help", no_argument, NULL, 'h'},
         {NULL, 0, NULL, 0}
     };
 
@@ -28,17 +29,23 @@ int main(int argc, char **argv)
         switch(result) {
         case 'p':
 			free(def_path);
-			def_alloc_flag = true;
+            def_path = NULL;
+			def_alloc_flag = false;
             def_path = optarg;
             break;
 		case 'P':
 			printf("current path: %s\n", def_path);
+            exit(EXIT_SUCCESS);
 			break;
         case 'd':
             detail_flag = true;
             break;
         case 'R':
             recursion_flag = false;
+            break;
+        case 'h':
+            help();
+            exit(EXIT_SUCCESS);
             break;
         default:
             fprintf(stderr, "main(): unknown option finded\n\n");

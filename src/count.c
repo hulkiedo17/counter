@@ -76,29 +76,6 @@ static long long count_lines_in_file(const char *path)
 
 /* NON-STATIC FUNCTIONS */
 
-char* get_current_dir(void)
-{
-	char *path_ptr = NULL;
-	size_t len;
-	char buffer[BUFSIZ];
-
-	if(getcwd(buffer, BUFSIZ) == NULL) {
-		fail(stderr, "get_current_dir(): error taking the path to the current directory (getcwd() failed)\n");
-		return NULL;
-	}
-
-	len = strlen(buffer) + 1;
-	path_ptr = malloc(sizeof(char) * len);
-	if(path_ptr == NULL) {
-		fail(stderr, "get_current_dir(): memory allocation error (malloc() failed)\n");
-		return NULL;
-	}
-
-	strncpy(path_ptr, buffer, len);
-
-	return path_ptr;
-}
-
 long long count_lines_in_dir(const char *path)
 {
     DIR *dir = NULL;
