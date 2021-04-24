@@ -17,19 +17,23 @@ bool config_and_shell_files_flag = false;
 
 static char* concat_name_and_path(const char *path, char *name)
 {
-    size_t len = 0;
+    size_t len = 0, len_path;
     char* full_path = NULL;
 
-    len = strlen(path) + strlen(name) + 2;
+	len_path = strlen(path) + 1;
+    len = len_path + strlen(name) + 1;
     full_path = malloc(len * sizeof(char));
     if(full_path == NULL) {
         fail(stderr, "concat_name_and_path(): memory allocation error (malloc() failed)\n");
         return NULL;
     }
 
-    strcpy(full_path, path);    // full_path = path
-    strcat(full_path, "/");     // full_path = path + /
-    strcat(full_path, name);    // full_path = path + / + name
+	strcpy(full_path, path);
+	if(path[len_path - 2] != '/') {
+		strcat(full_path, "/");
+	}
+	strcat(full_path, name);
+
     return full_path;
 }
 
