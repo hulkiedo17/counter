@@ -38,3 +38,5 @@ And yet, you can set a directory for search, though only in a full path (not in 
 --help - print help message (-h).
 
 --conf - include to count config files (-c).
+
+--version - shows current version of program (-v).

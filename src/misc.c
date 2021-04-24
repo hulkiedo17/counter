@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include "../include/misc.h"
 
+static const char* const program_version = "0.9";
+
 void fail(FILE* out, const char *fmt, ...)
 {
 	va_list ap;
@@ -47,4 +49,8 @@ void help(void) {
 	printf("\t(--no-recursion) -R - do not use files in nested(recursive) directories\n");
 	printf("\t(--cur-path)\t -P - just show the current path\n");
 	printf("\t(--detail)\t -d - show exactly which files are in use and the path to them\n");
+}
+
+void version(void) {
+	printf("program version = v%s\n\n", program_version);
 }

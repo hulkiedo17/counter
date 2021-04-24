@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 	bool def_alloc_flag = true;
     char* def_path = NULL;
 
-    const char* short_opt = "p:PdRhc";
+    const char* short_opt = "p:PdRhcv";
     const struct option long_opt[] = {
         {"path", required_argument, NULL, 'p'},
 		{"cur-path", no_argument, NULL, 'P'},
@@ -20,6 +20,7 @@ int main(int argc, char **argv)
         {"no-recursion", no_argument, NULL, 'R'},
         {"help", no_argument, NULL, 'h'},
         {"conf", no_argument, NULL, 'c'},
+		{"version", no_argument, NULL, 'v'},
         {NULL, 0, NULL, 0}
     };
 
@@ -48,6 +49,10 @@ int main(int argc, char **argv)
             help();
             exit(EXIT_SUCCESS);
             break;
+		case 'v':
+			version();
+			exit(EXIT_SUCCESS);
+			break;
         case 'c':
             config_and_shell_files_flag = true;
             break;
