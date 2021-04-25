@@ -6,7 +6,7 @@ counter - is a program that counts lines in files in the current directory. Ther
 
 ## Example of usage
 <p align="center">
-  <a href="https://asciinema.org/a/aeDUIqEVTHaYC9xd5l6V9i2Oy" target="_blank"><img src="https://asciinema.org/a/aeDUIqEVTHaYC9xd5l6V9i2Oy.svg" /></a>
+  <image src="counter.gif">
 </p>
 
 ## How to launch
