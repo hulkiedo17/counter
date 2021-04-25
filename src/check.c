@@ -58,10 +58,10 @@ bool is_file(const char *path)
 {
     struct stat buf;
 
-	if(path == NULL) {
-            fail(stderr, "is_file(): the function argument was passed the NULL value (const char *path)\n");
-            return false;
-	}
+    if(path == NULL) {
+        fail(stderr, "is_file(): the function argument was passed the NULL value (const char *path)\n");
+        return false;
+    }
 
     if(stat(path, &buf) == 0) {
         if(S_ISREG(buf.st_mode)) {
