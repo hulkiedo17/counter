@@ -1,7 +1,4 @@
 # counter
-Program to count lines in files in current directories
-
-## What is this?
 counter - is a program that counts lines in files in the current directory. There is also the possibility of recursive access to directories, that is, lines will be counted in files in subdirectories as well. And yet, you can set a directory for search, though only in a full path (not in a relative one), that is, from / to the desired directory.
 
 ## Example of usage
