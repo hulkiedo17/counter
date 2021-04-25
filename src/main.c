@@ -9,18 +9,18 @@ int main(int argc, char **argv)
 {
     int result;
     long long count;
-	bool def_alloc_flag = true;
+    bool def_alloc_flag = true;
     char* def_path = NULL;
 
     const char* short_opt = "p:PdRhcv";
     const struct option long_opt[] = {
         {"path", required_argument, NULL, 'p'},
-		{"cur-path", no_argument, NULL, 'P'},
+        {"cur-path", no_argument, NULL, 'P'},
         {"detail", no_argument, NULL, 'd'},
         {"no-recursion", no_argument, NULL, 'R'},
         {"help", no_argument, NULL, 'h'},
         {"conf", no_argument, NULL, 'c'},
-		{"version", no_argument, NULL, 'v'},
+        {"version", no_argument, NULL, 'v'},
         {NULL, 0, NULL, 0}
     };
 
@@ -30,15 +30,15 @@ int main(int argc, char **argv)
     {
         switch(result) {
         case 'p':
-			free(def_path);
+            free(def_path);
             def_path = NULL;
-			def_alloc_flag = false;
+            def_alloc_flag = false;
             def_path = optarg;
             break;
-		case 'P':
-			printf("current path: %s\n", def_path);
+        case 'P':
+            printf("current path: %s\n", def_path);
             exit(EXIT_SUCCESS);
-			break;
+            break;
         case 'd':
             detail_flag = true;
             break;
@@ -49,10 +49,10 @@ int main(int argc, char **argv)
             help();
             exit(EXIT_SUCCESS);
             break;
-		case 'v':
-			version();
-			exit(EXIT_SUCCESS);
-			break;
+        case 'v':
+            version();
+            exit(EXIT_SUCCESS);
+            break;
         case 'c':
             config_and_shell_files_flag = true;
             break;
@@ -63,17 +63,18 @@ int main(int argc, char **argv)
     }
 
     if((count = count_lines_in_dir(def_path)) != -1) {
-		if(detail_flag == true) {
-    		printf("\n%lld\n", count);
-		} else {
-			printf("%lld\n", count);
-		}
-	} else {
-		fail(stderr, "main(): an error occurred while counting in the count_lines_in_dir() function\n");
-	}
+        if(detail_flag == true) {
+            printf("\n%lld\n", count);
+        } else {
+            printf("%lld\n", count);
+        }
+    } else {
+        fail(stderr, "main(): an error occurred while counting in the count_lines_in_dir() function\n");
+    }
 
-	if(def_path && def_alloc_flag)
-		free(def_path);
+    if(def_path && def_alloc_flag) {
+        free(def_path);
+    }
 
     return 0;
 }
