@@ -35,7 +35,7 @@ for arg in "$@"; do
         echo "  --enable-silence:   activate silence mode"
         echo "  --disable-silence:  activate non-silence mode"
         echo "all invalid options are silently ignored"
-		exit 0
+        exit 0
         ;;
     esac
 done
