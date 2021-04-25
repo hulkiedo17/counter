@@ -59,8 +59,8 @@ bool is_file(const char *path)
     struct stat buf;
 
 	if(path == NULL) {
-		fail(stderr, "is_file(): the function argument was passed the NULL value (const char *path)\n");
-		return false;
+            fail(stderr, "is_file(): the function argument was passed the NULL value (const char *path)\n");
+            return false;
 	}
 
     if(stat(path, &buf) == 0) {
@@ -76,10 +76,10 @@ bool is_dir(const char *path)
 {
     struct stat buf;
 
-	if(path == NULL) {
-		fail(stderr, "is_dir(): the function argument was passed the NULL value (const char *path)\n");
-		return false;
-	}
+    if(path == NULL) {
+        fail(stderr, "is_dir(): the function argument was passed the NULL value (const char *path)\n");
+        return false;
+    }
 
     if(stat(path, &buf) == 0) {
         if(S_ISDIR(buf.st_mode)) {
@@ -95,7 +95,7 @@ bool is_normal_file(const char *path)
     int res = false;
 
     if(path == NULL) {
-		fail(stderr, "is_normal_file(): the function argument was passed the NULL value (const char *path)\n");
+        fail(stderr, "is_normal_file(): the function argument was passed the NULL value (const char *path)\n");
         return res;
     }
 
@@ -121,7 +121,7 @@ bool is_normal_dir(const char *path)
     bool res = false;
 
     if(path == NULL) {
-		fail(stderr, "is_normal_dir(): the function argument was passed the NULL value (const char *path)\n");
+        fail(stderr, "is_normal_dir(): the function argument was passed the NULL value (const char *path)\n");
         return res;
     }
 
@@ -129,12 +129,12 @@ bool is_normal_dir(const char *path)
         res = false;
     } else if(strchr(path, '.') != NULL) {
         res = false;
-	} else if(strstr(path, "doc") != NULL) {
-		res = false;
-	} else if(strstr(path, "bin") != NULL) {
-		res = false;
-	} else if(strstr(path, "build") != NULL) {
-		res = false;
+    } else if(strstr(path, "doc") != NULL) {
+        res = false;
+    } else if(strstr(path, "bin") != NULL) {
+        res = false;
+    } else if(strstr(path, "build") != NULL) {
+        res = false;
     } else {
         res = true;
     }
