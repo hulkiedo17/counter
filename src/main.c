@@ -21,6 +21,7 @@ int main(int argc, char **argv)
         {"help", no_argument, NULL, 'h'},
         {"conf", no_argument, NULL, 'c'},
         {"version", no_argument, NULL, 'v'},
+	{"no-spaces", no_argument, NULL, 'n'},
         {NULL, 0, NULL, 0}
     };
 
@@ -55,6 +56,9 @@ int main(int argc, char **argv)
             break;
         case 'c':
             config_and_shell_files_flag = true;
+            break;
+	case 'n':
+            count_without_spaces = true;
             break;
         default:
             fprintf(stderr, "main(): unknown option finded\n\n");

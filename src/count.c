@@ -7,11 +7,13 @@
 #include <sys/stat.h>
 #include <ctype.h>
 #include "../include/check.h"
+#include "../include/count.h"
 #include "../include/misc.h"
 
 bool detail_flag = false;
 bool recursion_flag = true;
 bool config_and_shell_files_flag = false;
+bool count_without_spaces = false;
 
 /* STATIC FUNCTIONS */
 
@@ -41,8 +43,7 @@ static long long count_lines_in_file(const char *path)
 {
     FILE *fp = NULL;
     long long count = 0;
-    int c;
-    bool char_flag = false;
+    char buffer[BUFSIZE];
 
     if(path == NULL) {
         fail(stderr, "count_lines_in_file(): the function argument was passed the NULL value (const char *path)\n");
@@ -55,28 +56,20 @@ static long long count_lines_in_file(const char *path)
         return -1;
     }
 
-    while((c = fgetc(fp)) != EOF) {
-        if(c == '\n') {
-            count++;
-            char_flag = false;
-        } else {
-            // if there is no '\n' character in the line, but
-            // there are other characters, then count this line
-            // by setting the flag
-            if(isalnum(c) || ispunct(c) || isspace(c)) {
-                char_flag = true;
+    while(fgets(buffer, BUFSIZE, fp) != NULL) {
+        if(strcmp(buffer, "\n") == 0) {
+            if(!count_without_spaces) {
+                count++;
             }
+        } else {
+            count++;
         }
     }
 
-    if(char_flag) {
-        count++;
-    }
-    
     if(detail_flag) {
         printf("%s = %lld\n", path, count);
     }
-    
+
     fclose(fp);
     return count;
 }
@@ -117,7 +110,7 @@ long long count_lines_in_dir(const char *path)
         // if recursion is allowed for dirs, then check
         // the dir if it is
         if(recursion_flag) {
-            // if it's a dir, then open it and count the 
+            // if it's a dir, then open it and count the
             // lines in the files there
             if(is_dir(full_path)) {
                 if(is_normal_dir(entry->d_name)) {

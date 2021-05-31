@@ -49,6 +49,7 @@ void help(void) {
     printf("\t(--no-recursion) -R - do not use files in nested(recursive) directories\n");
     printf("\t(--cur-path)\t -P - just show the current path\n");
     printf("\t(--detail)\t -d - show exactly which files are in use and the path to them\n");
+    printf("\t(--no-spaces)\t -n - dont count the empty lines\n");
 }
 
 void version(void) {
