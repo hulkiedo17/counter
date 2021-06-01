@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     bool def_alloc_flag = true;
     char* def_path = NULL;
 
-    const char* short_opt = "p:PdRhcv";
+    const char* short_opt = "p:PdRhcvn";
     const struct option long_opt[] = {
         {"path", required_argument, NULL, 'p'},
         {"cur-path", no_argument, NULL, 'P'},

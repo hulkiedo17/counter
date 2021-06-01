@@ -1,0 +1,7 @@
+bin/debug/*.o
+bin/debug/*.d
+bin/release/*.o
+bin/release/*.d
+counter
+Makefile
+
