@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     bool def_alloc_flag = true;
     char* def_path = NULL;
 
-    const char* short_opt = "p:PdRhcvn";
+    const char* short_opt = "p:PdRhcvno";
     const struct option long_opt[] = {
         {"path", required_argument, NULL, 'p'},
         {"cur-path", no_argument, NULL, 'P'},
@@ -22,6 +22,7 @@ int main(int argc, char **argv)
         {"conf", no_argument, NULL, 'c'},
         {"version", no_argument, NULL, 'v'},
 	{"no-spaces", no_argument, NULL, 'n'},
+	{"output-clean", no_argument, NULL, 'o'},
         {NULL, 0, NULL, 0}
     };
 
@@ -60,6 +61,11 @@ int main(int argc, char **argv)
 	case 'n':
             count_without_spaces = true;
             break;
+        case 'o':
+	    free(def_path);
+	    def_path = strdup(".");
+	    clean_output = true;
+	    break;
         default:
             fprintf(stderr, "main(): unknown option finded\n\n");
             break;
@@ -73,7 +79,7 @@ int main(int argc, char **argv)
             printf("%lld\n", count);
         }
     } else {
-        fail(stderr, "main(): an error occurred while counting in the count_lines_in_dir() function\n");
+        warning(stderr, "main(): an error occurred while counting in the count_lines_in_dir() function\n");
     }
 
     if(def_path && def_alloc_flag) {

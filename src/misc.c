@@ -14,6 +14,16 @@ void fail(FILE* out, const char *fmt, ...)
     va_start(ap, fmt);
     vfprintf(out, fmt, ap);
     va_end(ap);
+    exit(EXIT_FAILURE);
+}
+
+void warning(FILE* out, const char *fmt, ...)
+{
+    va_list ap;
+
+    va_start(ap, fmt);
+    vfprintf(out, fmt, ap);
+    va_end(ap);
 }
 
 char* getcw(void)
@@ -31,7 +41,6 @@ char* getcw(void)
     path_ptr = malloc(sizeof(char) * len);
     if(path_ptr == NULL) {
         fail(stderr, "getcw(): memory allocation error (malloc() failed)\n");
-        return NULL;
     }
 
     strncpy(path_ptr, buffer, len);
@@ -54,4 +63,14 @@ void help(void) {
 
 void version(void) {
     printf("program version = v%s\n\n", program_version);
+}
+
+char* strdup(const char *string) {
+    size_t length = strlen(string) + 1;
+    char* pstr = malloc(length);
+    if(pstr == NULL) {
+        fail(stderr, "strdup(): malloc failed\n");
+    }
+    strncpy(pstr, string, length);
+    return pstr;
 }

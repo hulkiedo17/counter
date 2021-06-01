@@ -59,7 +59,7 @@ bool is_file(const char *path)
     struct stat buf;
 
     if(path == NULL) {
-        fail(stderr, "is_file(): the function argument was passed the NULL value (const char *path)\n");
+        warning(stderr, "is_file(): the function argument was passed the NULL value (const char *path)\n");
         return false;
     }
 
@@ -77,7 +77,7 @@ bool is_dir(const char *path)
     struct stat buf;
 
     if(path == NULL) {
-        fail(stderr, "is_dir(): the function argument was passed the NULL value (const char *path)\n");
+        warning(stderr, "is_dir(): the function argument was passed the NULL value (const char *path)\n");
         return false;
     }
 
@@ -95,7 +95,7 @@ bool is_normal_file(const char *path)
     int res = false;
 
     if(path == NULL) {
-        fail(stderr, "is_normal_file(): the function argument was passed the NULL value (const char *path)\n");
+        warning(stderr, "is_normal_file(): the function argument was passed the NULL value (const char *path)\n");
         return res;
     }
 
@@ -121,7 +121,7 @@ bool is_normal_dir(const char *path)
     bool res = false;
 
     if(path == NULL) {
-        fail(stderr, "is_normal_dir(): the function argument was passed the NULL value (const char *path)\n");
+        warning(stderr, "is_normal_dir(): the function argument was passed the NULL value (const char *path)\n");
         return res;
     }
 

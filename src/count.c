@@ -14,6 +14,8 @@ bool detail_flag = false;
 bool recursion_flag = true;
 bool config_and_shell_files_flag = false;
 bool count_without_spaces = false;
+bool clean_output = false;
+//static long long max_count = 0;
 
 /* STATIC FUNCTIONS */
 
@@ -27,7 +29,6 @@ static char* concat_name_and_path(const char *path, char *name)
     full_path = malloc(len * sizeof(char));
     if(full_path == NULL) {
         fail(stderr, "concat_name_and_path(): memory allocation error (malloc() failed)\n");
-        return NULL;
     }
 
     strcpy(full_path, path);
@@ -39,6 +40,13 @@ static char* concat_name_and_path(const char *path, char *name)
     return full_path;
 }
 
+/*
+static void print_path_and_count(const char *path, long long count) 
+{
+    const char *temp_pointer = clean_output ? (path + 2) : path;
+    printf("%4lld = %s\n", count, temp_pointer);
+}*/
+
 static long long count_lines_in_file(const char *path)
 {
     FILE *fp = NULL;
@@ -47,13 +55,11 @@ static long long count_lines_in_file(const char *path)
 
     if(path == NULL) {
         fail(stderr, "count_lines_in_file(): the function argument was passed the NULL value (const char *path)\n");
-        return -1;
     }
 
     fp = fopen(path, "r");
     if(fp == NULL) {
         fail(stderr, "count_lines(): an error occurred while opening file (%s)\n", path);
-        return -1;
     }
 
     while(fgets(buffer, BUFSIZE, fp) != NULL) {
@@ -67,7 +73,9 @@ static long long count_lines_in_file(const char *path)
     }
 
     if(detail_flag) {
-        printf("%s = %lld\n", path, count);
+        //print_path_and_count(path, count);
+        const char *temp_ptr = clean_output ? (path + 2) : path;
+	printf("%lld = %s\n", count, temp_ptr);
     }
 
     fclose(fp);
@@ -85,13 +93,13 @@ long long count_lines_in_dir(const char *path)
     long long local_count = 0;
 
     if(path == NULL) {
-        fail(stderr, "count_lines_in_dir(): the function argument was passed the NULL value (const char *path)\n");
-        return -1;
+        warning(stderr, "count_lines_in_dir(): the function argument was passed the NULL value (const char *path)\n");
+	return -1;
     }
 
     dir = opendir(path);
     if(dir == NULL) {
-        fail(stderr, "count_lines_in_dir(): an error occurred while opening directory (%s)", path);
+        warning(stderr, "count_lines_in_dir(): an error occurred while opening directory (%s)", path);
         return -1;
     }
 
