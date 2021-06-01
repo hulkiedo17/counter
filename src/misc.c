@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "../include/misc.h"
 
-static const char* const program_version = "1.0";
+static const char* const program_version = "1.1";
 
 void fail(FILE* out, const char *fmt, ...)
 {
@@ -53,12 +53,13 @@ void help(void) {
     printf("options:\n");
     printf("\t(--path) -p [path_name] - specifying another directory for counting lines in files\n");
     printf("\t(--help) -h - prints this help message\n");
-    printf("\t(--conf) -c - include to count config files\n\n");
-
+    printf("\t(--conf) -c - include to count config files\n");
     printf("\t(--no-recursion) -R - do not use files in nested(recursive) directories\n");
     printf("\t(--cur-path)\t -P - just show the current path\n");
     printf("\t(--detail)\t -d - show exactly which files are in use and the path to them\n");
+    printf("\t(--version)\t -v - shows the program version\n");
     printf("\t(--no-spaces)\t -n - dont count the empty lines\n");
+    printf("\t(--clean-output) -o - do not print the global file path\n");
 }
 
 void version(void) {

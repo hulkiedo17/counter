@@ -32,6 +32,7 @@ int main(int argc, char **argv)
     {
         switch(result) {
         case 'p':
+            clean_output = false;
             free(def_path);
             def_path = NULL;
             def_alloc_flag = false;
@@ -58,14 +59,17 @@ int main(int argc, char **argv)
         case 'c':
             config_and_shell_files_flag = true;
             break;
-	case 'n':
+        case 'n':
             count_without_spaces = true;
             break;
         case 'o':
-	    free(def_path);
-	    def_path = strdup(".");
-	    clean_output = true;
-	    break;
+            if(def_alloc_flag == false) break;
+
+            free(def_path);
+            def_path = strdup(".");
+            clean_output = true;
+            def_alloc_flag = true;
+            break;
         default:
             fprintf(stderr, "main(): unknown option finded\n\n");
             break;
