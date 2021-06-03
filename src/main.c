@@ -1,6 +1,7 @@
 #include <stdio.h>
-#include <getopt.h>
 #include <stdlib.h>
+#include <string.h>
+#include <getopt.h>
 #include <stdbool.h>
 #include "../include/count.h"
 #include "../include/misc.h"
@@ -12,7 +13,7 @@ int main(int argc, char **argv)
     bool def_alloc_flag = true;
     char* def_path = NULL;
 
-    const char* short_opt = "p:PdRhcvno";
+    const char* short_opt = "p:PdRhcvno:";
     const struct option long_opt[] = {
         {"path", required_argument, NULL, 'p'},
         {"cur-path", no_argument, NULL, 'P'},
@@ -22,7 +23,7 @@ int main(int argc, char **argv)
         {"conf", no_argument, NULL, 'c'},
         {"version", no_argument, NULL, 'v'},
 	{"no-spaces", no_argument, NULL, 'n'},
-	{"output-clean", no_argument, NULL, 'o'},
+	{"output", no_argument, NULL, 'o'},
         {NULL, 0, NULL, 0}
     };
 
@@ -63,12 +64,28 @@ int main(int argc, char **argv)
             count_without_spaces = true;
             break;
         case 'o':
-            if(def_alloc_flag == false) break;
+            if(strcmp(optarg, "default") == 0 || strcmp(optarg, "d") == 0) {
+                if(def_alloc_flag == false) break;
 
-            free(def_path);
-            def_path = strdup(".");
-            clean_output = true;
-            def_alloc_flag = true;
+                free(def_path);
+                def_path = strdup(".");
+                clean_output = true;
+                def_alloc_flag = true;
+            } else if(strcmp(optarg, "pipe_short") == 0 || strcmp(optarg, "ps") == 0) {
+                output_pipe_full = false;
+                output_pipe_short = true;
+                output_pipe_long = false;
+            } else if(strcmp(optarg, "pipe_long") == 0 || strcmp(optarg, "pl") == 0) {
+                output_pipe_full = false;
+                output_pipe_short = false;
+                output_pipe_long = true;
+            } else if(strcmp(optarg, "pipe_full") == 0 || strcmp(optarg, "pf") == 0) {
+                output_pipe_full = true;
+                output_pipe_short = false;
+                output_pipe_long = false;
+	    } else {
+                printf("unknown option -> -o %s\n", optarg);
+            }
             break;
         default:
             fprintf(stderr, "main(): unknown option finded\n\n");
@@ -76,11 +93,18 @@ int main(int argc, char **argv)
         }
     }
 
-    if((count = count_lines_in_dir(def_path)) != -1) {
-        if(detail_flag == true) {
-            printf("\n%lld\n", count);
-        } else {
+    count = count_lines_in_dir(def_path);
+    if(count != -1) {
+        if(output_pipe_short) {
+            printf("%lld", count);
+        } else if(output_pipe_full) {
             printf("%lld\n", count);
+        } else if(!output_pipe_long) {
+            if(detail_flag) {
+                printf("\n%lld\n", count);
+            } else {
+                printf("%lld\n", count);
+            }
         }
     } else {
         warning(stderr, "main(): an error occurred while counting in the count_lines_in_dir() function\n");

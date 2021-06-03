@@ -59,7 +59,11 @@ void help(void) {
     printf("\t(--detail)\t -d - show exactly which files are in use and the path to them\n");
     printf("\t(--version)\t -v - shows the program version\n");
     printf("\t(--no-spaces)\t -n - dont count the empty lines\n");
-    printf("\t(--clean-output) -o - do not print the global file path\n");
+    printf("\t(--output)\t -o [ps | pl | pf | d] - sets the output format, main arguments:\n");
+    printf("\t\tps (pipe_short) - short output (only final count)\n");
+    printf("\t\tpl (pipe_long) - long output (without final count)\n");
+    printf("\t\tpf (pipe_full) - full output (without spaces)\n");
+    printf("\t\tds (default) - default output\n");
 }
 
 void version(void) {

@@ -15,6 +15,9 @@ bool recursion_flag = true;
 bool config_and_shell_files_flag = false;
 bool count_without_spaces = false;
 bool clean_output = false;
+bool output_pipe_short = false;
+bool output_pipe_long = false;
+bool output_pipe_full = false;
 
 /* STATIC FUNCTIONS */
 
@@ -64,9 +67,11 @@ static long long count_lines_in_file(const char *path)
         }
     }
 
-    if(detail_flag) {
-        if(clean_output) {
-	    printf("%lld = %s\n", count, path + 2);
+    if(detail_flag || !output_pipe_short) {
+        if(output_pipe_long || output_pipe_full) {
+            printf("%lld=%s\n", count, path);
+        } else if(clean_output) {
+            printf("%lld = %s\n", count, path + 2);
         } else {
             printf("%lld = %s\n", count, path);
         }
