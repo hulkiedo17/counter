@@ -101,9 +101,9 @@ int main(int argc, char **argv)
             printf("%lld\n", count);
         } else if(!output_pipe_long) {
             if(detail_flag) {
-                printf("\n%lld\n", count);
+                printf("\ntotal count = %lld\n", count);
             } else {
-                printf("%lld\n", count);
+                printf("total count = %lld\n", count);
             }
         }
     } else {
