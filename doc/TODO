@@ -1,3 +1,2 @@
 TODO:
-- add option (like -C) to enable count comments in source files (while without this option the whole file is count)
 - add config file and environment variables(like this: CONFIG_FILES=.git:.sh:.conf, SRC_FILES=.c:.h:.asm:.S)

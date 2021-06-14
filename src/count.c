@@ -18,6 +18,8 @@ bool clean_output = false;
 bool output_pipe_short = false;
 bool output_pipe_long = false;
 bool output_pipe_full = false;
+bool count_only_comments = false;
+bool without_zero_count = false;
 
 /* STATIC FUNCTIONS */
 
@@ -47,6 +49,7 @@ static long long count_lines_in_file(const char *path)
     FILE *fp = NULL;
     long long count = 0;
     char buffer[BUFSIZE];
+    bool local_comments_count_flag = false;
 
     if(path == NULL) {
         fail(stderr, "count_lines_in_file(): the function argument was passed the NULL value (const char *path)\n");
@@ -58,26 +61,70 @@ static long long count_lines_in_file(const char *path)
     }
 
     while(fgets(buffer, BUFSIZE, fp) != NULL) {
-        if(strcmp(buffer, "\n") == 0) {
-            if(!count_without_spaces) {
+        if(count_only_comments) {
+            if(strstr(buffer, "//") != NULL) {
                 count++;
+                continue;
+            }
+
+            if(local_comments_count_flag == false && strstr(buffer, "/*") != NULL && strstr(buffer, "*/") != NULL) {
+                count++;
+		continue;
+            }
+
+            if(local_comments_count_flag == false && strstr(buffer, "/*") != NULL) {
+                count++;
+                local_comments_count_flag = true;
+            } else if(local_comments_count_flag == true && strstr(buffer, "*/") != NULL) {
+                count++;
+		local_comments_count_flag = false;
+            } else if(local_comments_count_flag == true && strstr(buffer, "/*") == NULL && strstr(buffer, "*/") == NULL) {
+                count++;
+            } else {
+                continue;
             }
         } else {
-            count++;
+            if(strcmp(buffer, "\n") == 0) {
+                if(!count_without_spaces) {
+                    count++;
+                }
+            } else {
+                count++;
+            }
         }
     }
 
     if(!output_pipe_short) {
         if(output_pipe_long || output_pipe_full) {
-            printf("%lld=%s\n", count, path);
-        } else {
-            if(detail_flag) {
-                if(clean_output) {
-                    printf("%lld = %s\n", count, path + 2);
-                } else {
-                    printf("%lld = %s\n", count, path);
+            if(!without_zero_count) {
+                if(count != 0) {
+                    printf("%lld=%s\n", count, path);
                 }
-            }
+            } else {
+                printf("%lld=%s\n", count, path);
+	    }
+        } else {
+            if(!without_zero_count) {
+                if(detail_flag) {
+                    if(clean_output) {
+                        printf("%lld = %s\n", count, path + 2);
+                    } else {
+                        printf("%lld = %s\n", count, path);
+                    }
+                }
+            } else {
+                if(detail_flag) {
+                    if(clean_output) {
+                        if(count != 0) {
+                            printf("%lld = %s\n", count, path + 2);
+                        }
+                    } else {
+                        if(count != 0) {
+                            printf("%lld = %s\n", count, path);
+                        }
+                    }
+                }
+	    }
         }
     }
 

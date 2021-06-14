@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "../include/misc.h"
 
-static const char* const program_version = "1.1";
+static const char* const program_version = "1.2";
 
 void fail(FILE* out, const char *fmt, ...)
 {
@@ -59,6 +59,8 @@ void help(void) {
     printf("\t(--detail)\t -d - show exactly which files are in use and the path to them\n");
     printf("\t(--version)\t -v - shows the program version\n");
     printf("\t(--no-spaces)\t -n - dont count the empty lines\n");
+    printf("\t(--comments)\t -C - count only comment lines in files\n");
+    printf("\t(--without-zero) -w - only show file count that bigger than 0\n");
     printf("\t(--output)\t -o [ps | pl | pf | d] - sets the output format, main arguments:\n");
     printf("\t\tps (pipe_short) - short output (only final count)\n");
     printf("\t\tpl (pipe_long) - long output (without final count)\n");

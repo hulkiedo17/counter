@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     bool def_alloc_flag = true;
     char* def_path = NULL;
 
-    const char* short_opt = "p:PdRhcvno:";
+    const char* short_opt = "p:PdRhcvno:Cw";
     const struct option long_opt[] = {
         {"path", required_argument, NULL, 'p'},
         {"cur-path", no_argument, NULL, 'P'},
@@ -24,6 +24,8 @@ int main(int argc, char **argv)
         {"version", no_argument, NULL, 'v'},
 	{"no-spaces", no_argument, NULL, 'n'},
 	{"output", no_argument, NULL, 'o'},
+        {"comments", no_argument, NULL, 'C'},
+	{"without-zero", no_argument, NULL, 'w'},
         {NULL, 0, NULL, 0}
     };
 
@@ -83,9 +85,15 @@ int main(int argc, char **argv)
                 output_pipe_full = true;
                 output_pipe_short = false;
                 output_pipe_long = false;
-	    } else {
+            } else {
                 printf("unknown option -> -o %s\n", optarg);
             }
+            break;
+        case 'C':
+            count_only_comments = true;
+            break;
+        case 'w':
+            without_zero_count = true;
             break;
         default:
             fprintf(stderr, "main(): unknown option finded\n\n");
