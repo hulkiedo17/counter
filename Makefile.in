@@ -34,7 +34,7 @@ $(BUILD_DIR)$(EXEC): $(OBJ)
 	$(SHOW_CC) $@
 	$(SILENCE)$(CC) $(LDFLAGS) $^ -o $@
 
-$(BUILD_DIR)%.o: %.c $(HDR)
+$(BUILD_DIR)%.o: %.c $(HEADERS)
 	$(SHOW_CC) $@
 	$(SILENCE)$(CC) $(CFLAGS) -c $< -o $@
 
