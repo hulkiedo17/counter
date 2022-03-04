@@ -13,7 +13,11 @@ options:
 - (--comments)	 -C - count only comment lines in files
 - (--without-zero) -w - only show file count that bigger than 0
 - (--output)	 -o [ps | pl | pf | d] - sets the output format, main arguments:
+	
 	ps (pipe_short) - short output (only final count)
+	
 	pl (pipe_long) - long output (without final count)
+	
 	pf (pipe_full) - full output (without spaces)
+	
 	d (default) - default output
