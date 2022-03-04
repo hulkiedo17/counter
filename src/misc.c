@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "../include/misc.h"
 
-static const char* const program_version = "1.2";
+static const char* const program_version = "1.3";
 
 void fail(FILE* out, const char *fmt, ...)
 {
