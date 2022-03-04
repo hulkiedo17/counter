@@ -4,11 +4,17 @@ counter - is a program that counts lines in files in the current directory. Ther
 ## How to launch
 This program works only on linux(ubuntu)
 
-Required tools: gcc, make, shell
+Required tools: gcc, cmake, make, bash
 
 To compile program type this commands:
 ```shell
-$ ./configure.sh
+$ ./build.sh -R
+```
+
+Or use more familiar way
+```shell
+$ mkdir build && cd build
+$ cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local/ ..
 $ make
 $ sudo make install
 ```
@@ -25,3 +31,7 @@ enter the -h option to check all program options:
 $ counter -h
 ```
 
+also, you can check build options, by typing -h to build script:
+```shell
+$ ./build.sh -h
+```
