@@ -19,19 +19,28 @@ Release() {
 }
 
 Install() {
-	if [ ! $PWD == $0 ]; then
+	if [[ "$PWD" == *"/build" ]]; then
 		sudo make install
 		exit 0
+	elif [ -d "build" ]; then
+		cd build
+		sudo make install
+		exit 0
+	else
+		echo "build directory does not exists"
+		exit 0
 	fi
-
-	# TODO: make condition if dir exists
-	cd build
-	sudo make install
 }
 
 Clean() {
-	cd build
-	make clean
+	if [ -d "build" ]; then
+		cd build
+		make clean
+		exit 0
+	else
+		echo "build directory does not exists"
+		exit 0
+	fi
 }
 
 Help() {

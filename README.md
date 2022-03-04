@@ -17,7 +17,7 @@ To compile program type this commands:
 $ ./build.sh
 ```
 
-Or use more familiar way
+Or use more familiar way(check docs/cmake.md):
 ```shell
 $ mkdir build && cd build
 $ cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local/ ..
@@ -32,7 +32,7 @@ $ counter
 
 ## options
 
-enter the -h option to check all program options:
+enter the -h option to check all program options(check docs/counter.md):
 ```shell
 $ counter -h
 ```
@@ -41,3 +41,6 @@ also, you can check build options, by typing -h to build script:
 ```shell
 $ ./build.sh -h
 ```
+
+## docs
+you can check documentation to build options or command options in docs/ in files: build.md, cmake.md, counter.md
