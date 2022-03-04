@@ -16,4 +16,4 @@ options:
 	ps (pipe_short) - short output (only final count)
 	pl (pipe_long) - long output (without final count)
 	pf (pipe_full) - full output (without spaces)
-	ds (default) - default output
+	d (default) - default output

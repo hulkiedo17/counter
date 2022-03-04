@@ -65,7 +65,7 @@ void help(void) {
     printf("\t\tps (pipe_short) - short output (only final count)\n");
     printf("\t\tpl (pipe_long) - long output (without final count)\n");
     printf("\t\tpf (pipe_full) - full output (without spaces)\n");
-    printf("\t\tds (default) - default output\n");
+    printf("\t\td (default) - default output\n");
 }
 
 void version(void) {
