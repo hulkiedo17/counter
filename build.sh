@@ -38,7 +38,7 @@ Help() {
 	printf "[cli options]:\n"
 	printf "\t-d - compile debug version\n"
 	printf "\t-r - compile release version\n"
-	printf "\t-i - install debug or release version"
+	printf "\t-i - install debug or release version\n"
 	printf "\t-D - compile and install debug version\n"
 	printf "\t-R - compile and install release version\n"
 	printf "\t-c - delete compiled object files\n"

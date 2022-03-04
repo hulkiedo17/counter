@@ -6,9 +6,15 @@ This program works only on linux(ubuntu)
 
 Required tools: gcc, cmake, make, bash
 
+Firstly, you need to prepare compile, download repository:
+```shell
+$ git clone https://github.com/hulkiedo17/counter.git
+$ cd counter
+```
+
 To compile program type this commands:
 ```shell
-$ ./build.sh -R
+$ ./build.sh
 ```
 
 Or use more familiar way

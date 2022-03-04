@@ -1,2 +1,0 @@
-TODO:
-- add config file and environment variables(like this: CONFIG_FILES=.git:.sh:.conf, SRC_FILES=.c:.h:.asm:.S)
