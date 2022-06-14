@@ -1,38 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 prefix=/usr/local/
 
-Debug() {
+debug() {
 	mkdir -p build
 	cd build
 
 	cmake "-DCMAKE_BUILD_TYPE=DEBUG" "-DCMAKE_INSTALL_PREFIX=$prefix" ".."
 	make
+	sudo make install
 }
 
-Release() {
+release() {
 	mkdir -p build
 	cd build
 
 	cmake "-DCMAKE_BUILD_TYPE=RELEASE" "-DCMAKE_INSTALL_PREFIX=$prefix" ".."
 	make
+	sudo make install
 }
 
-Install() {
-	if [[ "$PWD" == *"/build" ]]; then
-		sudo make install
-		exit 0
-	elif [ -d "build" ]; then
-		cd build
-		sudo make install
-		exit 0
-	else
-		echo "build directory does not exists"
-		exit 0
-	fi
-}
-
-Clean() {
+clean() {
 	if [ -d "build" ]; then
 		cd build
 		make clean
@@ -43,43 +31,30 @@ Clean() {
 	fi
 }
 
-Help() {
+help_msg() {
 	printf "[cli options]:\n"
-	printf "\t-d - compile debug version\n"
-	printf "\t-r - compile release version\n"
-	printf "\t-i - install debug or release version\n"
-	printf "\t-D - compile and install debug version\n"
-	printf "\t-R - compile and install release version\n"
+	printf "\t-d - compile and install debug version\n"
+	printf "\t-r - compile and install release version\n"
 	printf "\t-c - delete compiled object files\n"
 	printf "\t-h - prints help message\n"
 }
 
-ProcessOptions() {
-	CurrentDir="$PWD"
+check_options() {
 	if [ -z $* ]; then
-		Release
-		Install $CurrentDir
+		release
 		exit 0
 	fi
 
-	while getopts "driDRch" opt; do
+	while getopts "drch" opt; do
 		case $opt in
-			d) Debug ;;
-			r) Release ;;
-			i) Install $CurrentDir ;;
-			D)
-				Debug
-				Install $CurrentDir
-				;;
-			R)
-				Release
-				Install $CurrentDir
-				;;
-			c) Clean ;;
-			h) Help ;;
+			d) debug ;;
+			r) release ;;
+			c) clean ;;
+			h) help_msg ;;
 			*) echo "unknown option" ;;
 		esac
 	done
 }
 
-ProcessOptions "$@"
+check_options "$@"
+exit 0

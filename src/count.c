@@ -1,187 +1,147 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include <dirent.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <ctype.h>
-#include "../include/check.h"
-#include "../include/count.h"
+#include <assert.h>
+#include <stdbool.h>
 #include "../include/misc.h"
+#include "../include/check.h"
 
-bool detail_flag = false;
-bool recursion_flag = true;
-bool config_and_shell_files_flag = false;
-bool count_without_spaces = false;
-bool clean_output = false;
-bool output_pipe_short = false;
-bool output_pipe_long = false;
-bool output_pipe_full = false;
-bool count_only_comments = false;
-bool without_zero_count = false;
+#define LINE_SIZE 256
 
-/* STATIC FUNCTIONS */
+char* source_file = NULL;
 
-static char* concat_name_and_path(const char *path, char *name)
+bool verbose_flag = false;
+bool no_recursive_flag = false;
+bool no_spaces = false;
+bool no_zero = false;
+
+static char* read_line_from_file(FILE* fp)
 {
-    size_t len = 0, len_path;
-    char* full_path = NULL;
+	assert(fp != NULL);
 
-    len_path = strlen(path) + 1;
-    len = len_path + strlen(name) + 1;
-    full_path = malloc(len * sizeof(char));
-    if(full_path == NULL) {
-        fail(stderr, "concat_name_and_path(): memory allocation error (malloc() failed)\n");
-    }
+	int c;
+	size_t position = 0;
+	size_t line_length = LINE_SIZE;
 
-    strcpy(full_path, path);
-    if(path[len_path - 2] != '/') {
-        strcat(full_path, "/");
-    }
-    strcat(full_path, name);
+	char* line_buffer = calloc(line_length, sizeof(char));
+	if(line_buffer == NULL) 
+		fail(stderr, "error: allocation failed - %s\n", __func__);
 
-    return full_path;
-}
+	while(1)
+	{
+		c = fgetc(fp);
 
-static long long count_lines_in_file(const char *path)
-{
-    FILE *fp = NULL;
-    long long count = 0;
-    char buffer[BUFSIZE];
-    bool local_comments_count_flag = false;
-
-    if(path == NULL) {
-        fail(stderr, "count_lines_in_file(): the function argument was passed the NULL value (const char *path)\n");
-    }
-
-    fp = fopen(path, "r");
-    if(fp == NULL) {
-        fail(stderr, "count_lines(): an error occurred while opening file (%s)\n", path);
-    }
-
-    while(fgets(buffer, BUFSIZE, fp) != NULL) {
-        if(count_only_comments) {
-            if(strstr(buffer, "//") != NULL) {
-                count++;
-                continue;
-            }
-
-            if(local_comments_count_flag == false && strstr(buffer, "/*") != NULL && strstr(buffer, "*/") != NULL) {
-                count++;
-		continue;
-            }
-
-            if(local_comments_count_flag == false && strstr(buffer, "/*") != NULL) {
-                count++;
-                local_comments_count_flag = true;
-            } else if(local_comments_count_flag == true && strstr(buffer, "*/") != NULL) {
-                count++;
-		local_comments_count_flag = false;
-            } else if(local_comments_count_flag == true && strstr(buffer, "/*") == NULL && strstr(buffer, "*/") == NULL) {
-                count++;
-            } else {
-                continue;
-            }
-        } else {
-            if(strcmp(buffer, "\n") == 0) {
-                if(!count_without_spaces) {
-                    count++;
-                }
-            } else {
-                count++;
-            }
-        }
-    }
-
-    if(!output_pipe_short) {
-        if(output_pipe_long || output_pipe_full) {
-            if(!without_zero_count) {
-                if(count != 0) {
-                    printf("%lld=%s\n", count, path);
-                }
-            } else {
-                printf("%lld=%s\n", count, path);
-	    }
-        } else {
-            if(!without_zero_count) {
-                if(detail_flag) {
-                    if(clean_output) {
-                        printf("%lld = %s\n", count, path + 2);
-                    } else {
-                        printf("%lld = %s\n", count, path);
-                    }
-                }
-            } else {
-                if(detail_flag) {
-                    if(clean_output) {
-                        if(count != 0) {
-                            printf("%lld = %s\n", count, path + 2);
-                        }
-                    } else {
-                        if(count != 0) {
-                            printf("%lld = %s\n", count, path);
-                        }
-                    }
-                }
-	    }
-        }
-    }
-
-    fclose(fp);
-    return count;
-}
-
-/* NON-STATIC FUNCTIONS */
-
-long long count_lines_in_dir(const char *path)
-{
-    DIR *dir = NULL;
-    struct dirent *entry = NULL;
-    char *full_path = NULL;
-    long long count = 0;
-    long long local_count = 0;
-
-    if(path == NULL) {
-        warning(stderr, "count_lines_in_dir(): the function argument was passed the NULL value (const char *path)\n");
-	return -1;
-    }
-
-    dir = opendir(path);
-    if(dir == NULL) {
-        warning(stderr, "count_lines_in_dir(): an error occurred while opening directory (%s)", path);
-        return -1;
-    }
-
-    while((entry = readdir(dir)) != NULL) {
-        full_path = concat_name_and_path(path, entry->d_name);
-
-        // if it's a file, then count the lines in it
-        if(is_file(full_path)) {
-            if(is_normal_file(entry->d_name)) {
-                if((local_count = count_lines_in_file(full_path)) != -1) {
-                    count += local_count;
+		if(c == '\n')
+		{
+			line_buffer[position] = '\0';
+			return line_buffer;
 		}
-            }
-        }
+		else if(c == EOF)
+		{
+			if(position != 0)
+			{
+				line_buffer[position] = '\0';
+				return line_buffer;
+			}
 
-        // if recursion is allowed for dirs, then check
-        // the dir if it is
-        if(recursion_flag) {
-            // if it's a dir, then open it and count the
-            // lines in the files there
-            if(is_dir(full_path)) {
-                if(is_normal_dir(entry->d_name)) {
-                    if((local_count = count_lines_in_dir(full_path)) != -1) {
-                        count += local_count;
-		    }
-                }
-            }
-        }
+			free(line_buffer);
+			return NULL;
+		}
+		else
+		{
+			line_buffer[position] = c;
+		}
 
-        free(full_path);
-    }
+		position++;
 
-    closedir(dir);
-    return count;
+		if(position >= line_length)
+		{
+			line_length += LINE_SIZE;
+			line_buffer = realloc(line_buffer, line_length);
+			if(line_buffer == NULL)
+				fail(stderr, "error: allocation failed - %s\n", __func__);
+		}
+	}
+
+	return NULL;
+}
+
+static size_t count_lines_in_file(const char* filepath)
+{
+	assert(filepath != NULL);
+
+	size_t count = 0;
+	char* buffer = NULL;
+	FILE* fp = NULL;
+
+	if(filepath == NULL)
+		fail(stderr, "warning: the function argument was passed the NULL value - %s\n", __func__);
+
+	fp = fopen(filepath, "r");
+
+	while((buffer = read_line_from_file(fp)) != NULL)
+	{
+		if(!no_spaces)
+			count++;
+		else if(no_spaces && (buffer[0] != '\0'))
+			count++;
+
+		free(buffer);
+	}
+	
+	fclose(fp);
+
+	if(verbose_flag)
+	{
+		if(no_zero && (count > 0)) 
+			fprintf(stdout, "%s = %zd\n", filepath, count);
+		else if(!no_zero)
+			fprintf(stdout, "%s = %zd\n", filepath, count);
+	}
+
+	return count;
+}
+
+size_t count_lines(const char* path)
+{
+	assert(path != NULL);
+
+	DIR* dir = NULL;
+	struct dirent* entry = NULL;
+	char* full_path = NULL;
+	size_t count = 0;
+
+	if(path == NULL)
+		fail(stderr, "warning: the function argument was passed the NULL value - %s\n", __func__);
+
+	if(source_file != NULL)
+	{
+		if(is_file(source_file) && check_file(source_file))
+			count += count_lines_in_file(source_file);
+		else
+			fprintf(stderr, "error: invalid file - %s\n", __func__);
+		
+		return count;
+	}
+
+	dir = opendir(path);
+	if(dir == NULL)
+		fail(stderr, "error: opendir() function failed - %s\n", __func__);
+
+	while((entry = readdir(dir)) != NULL)
+	{
+		full_path = concatenate_path_and_name(path, entry->d_name);
+
+		if(is_file(full_path) && check_file(entry->d_name))
+			count += count_lines_in_file(full_path);
+
+		if(is_dir(full_path) && check_dir(entry->d_name) && !no_recursive_flag)
+			count += count_lines(full_path);
+
+		free(full_path);
+	}
+
+	closedir(dir);
+	return count;
 }

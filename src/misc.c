@@ -1,83 +1,90 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 #include <unistd.h>
-#include "../include/misc.h"
+#include <stdarg.h>
+#include <assert.h>
+#include <stdbool.h>
 
-static const char* const program_version = "1.3";
-
-void fail(FILE* out, const char *fmt, ...)
+void fail(FILE* out, const char* fmt, ...)
 {
-    va_list ap;
+	va_list ap;
 
-    va_start(ap, fmt);
-    vfprintf(out, fmt, ap);
-    va_end(ap);
-    exit(EXIT_FAILURE);
+	va_start(ap, fmt);
+	vfprintf(out, fmt, ap);
+	va_end(ap);
+
+	exit(EXIT_FAILURE);
 }
 
-void warning(FILE* out, const char *fmt, ...)
+char* duplicate_string(const char* string)
 {
-    va_list ap;
+	assert(string != NULL);
 
-    va_start(ap, fmt);
-    vfprintf(out, fmt, ap);
-    va_end(ap);
+	size_t length = strlen(string) + 1;
+
+	char* dup_string = calloc(length, sizeof(char));
+	if(dup_string == NULL)
+		fail(stderr, "error: allocation failed - %s\n", __func__);
+
+	memcpy(dup_string, string, length);
+
+	return dup_string;
 }
 
-char* getcw(void)
+char* concatenate_path_and_name(const char* path, const char* filename)
 {
-    char *path_ptr = NULL;
-    size_t len;
-    char buffer[BUFSIZ];
+	assert(path != NULL);
+	assert(filename != NULL);
 
-    if(getcwd(buffer, BUFSIZ) == NULL) {
-        fail(stderr, "getcw(): error taking the path to the current directory (getcwd() failed)\n");
-        return NULL;
-    }
+	size_t path_len = 0;
+	size_t filename_len = 0;
+	char* full_path = NULL;
 
-    len = strlen(buffer) + 1;
-    path_ptr = malloc(sizeof(char) * len);
-    if(path_ptr == NULL) {
-        fail(stderr, "getcw(): memory allocation error (malloc() failed)\n");
-    }
+	path_len = strlen(path) + 1;
+	filename_len = strlen(filename) + 1;
 
-    strncpy(path_ptr, buffer, len);
+	full_path = malloc((path_len + filename_len) * sizeof(char));
+	if(full_path == NULL)
+		fail(stderr, "error: allocation failed - %s\n", __func__);
 
-    return path_ptr;
+	strncpy(full_path, path, path_len);
+
+	if(path[path_len - 2] != '/')
+	{
+		full_path[path_len - 1] = '/';
+		strncpy(full_path + path_len, filename, filename_len);
+	}
+	else
+	{
+		strncpy(full_path + path_len - 1, filename, filename_len);
+	}
+
+	return full_path;
 }
 
-void help(void) {
-    printf("Usage: counter [options]\n");
-    printf("options:\n");
-    printf("\t(--path) -p [path_name] - specifying another directory for counting lines in files\n");
-    printf("\t(--help) -h - prints this help message\n");
-    printf("\t(--conf) -c - include to count config files\n");
-    printf("\t(--no-recursion) -R - do not use files in nested(recursive) directories\n");
-    printf("\t(--cur-path)\t -P - just show the current path\n");
-    printf("\t(--detail)\t -d - show exactly which files are in use and the path to them\n");
-    printf("\t(--version)\t -v - shows the program version\n");
-    printf("\t(--no-spaces)\t -n - dont count the empty lines\n");
-    printf("\t(--comments)\t -C - count only comment lines in files\n");
-    printf("\t(--without-zero) -w - only show file count that bigger than 0\n");
-    printf("\t(--output)\t -o [ps | pl | pf | d] - sets the output format, main arguments:\n");
-    printf("\t\tps (pipe_short) - short output (only final count)\n");
-    printf("\t\tpl (pipe_long) - long output (without final count)\n");
-    printf("\t\tpf (pipe_full) - full output (without spaces)\n");
-    printf("\t\td (default) - default output\n");
+char* get_work_dir(void)
+{
+	char* path = NULL;
+
+	if((path = getcwd(NULL, 0)) == NULL)
+		fail(stderr, "error: getcwd failed - %s\n", __func__);
+
+	return path;
 }
 
-void version(void) {
-    printf("program version = v%s\n\n", program_version);
-}
+void help(void)
+{
+	fprintf(stdout, "Usage: countloc [options...]\n");
+	fprintf(stdout, "options:\n");
+	fprintf(stdout, "\t-h (--help)         - prints this help message\n");
+	fprintf(stdout, "\t-v (--verbose)      - prints files that counted\n");
+	fprintf(stdout, "\t-p (--path) [path]  - specifying another directory for counting lines in files\n");
+	fprintf(stdout, "\t-f (--file) [file]  - specifying file to count lines\n");
+	fprintf(stdout, "\t-r (--no-recursive) - do not use files in nested directories\n");
+	fprintf(stdout, "\t-s (--no-spaces)    - do not count empty lines in files\n");
+	fprintf(stdout, "\t-z (--no-zero)      - do not show empty files\n");
+	fprintf(stdout, "\t-t (--no-total)     - do not show total lines count of files\n");
 
-char* strdup(const char *string) {
-    size_t length = strlen(string) + 1;
-    char* pstr = malloc(length);
-    if(pstr == NULL) {
-        fail(stderr, "strdup(): malloc failed\n");
-    }
-    strncpy(pstr, string, length);
-    return pstr;
+	fprintf(stdout, "\n");
 }

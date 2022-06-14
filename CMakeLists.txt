@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 
 project(counter
-	VERSION 1.3
-	DESCRIPTION "Counter - count source files"
+	VERSION 1.4
+	DESCRIPTION "counter - count source files"
 	LANGUAGES C)
 
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU")

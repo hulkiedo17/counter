@@ -1,19 +1,13 @@
 #ifndef COUNT_H
-#define COUNT_H
+#define COUTN_H
 
-#define BUFSIZE 1024
+extern char* source_file;
 
-extern bool detail_flag;
-extern bool recursion_flag;
-extern bool config_and_shell_files_flag;
-extern bool count_without_spaces;
-extern bool clean_output;
-extern bool output_pipe_short;
-extern bool output_pipe_long;
-extern bool output_pipe_full;
-extern bool count_only_comments;
-extern bool without_zero_count;
+extern bool verbose_flag;
+extern bool no_recursive_flag;
+extern bool no_spaces;
+extern bool no_zero;
 
-long long count_lines_in_dir(const char *dir);
+size_t count_lines(const char* path);
 
 #endif
