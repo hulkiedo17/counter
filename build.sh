@@ -4,7 +4,7 @@ prefix=/usr/local/
 
 debug() {
 	mkdir -p build
-	cd build
+	cd build || exit
 
 	cmake "-DCMAKE_BUILD_TYPE=DEBUG" "-DCMAKE_INSTALL_PREFIX=$prefix" ".."
 	make
@@ -13,7 +13,7 @@ debug() {
 
 release() {
 	mkdir -p build
-	cd build
+	cd build || exit
 
 	cmake "-DCMAKE_BUILD_TYPE=RELEASE" "-DCMAKE_INSTALL_PREFIX=$prefix" ".."
 	make
@@ -22,7 +22,7 @@ release() {
 
 clean() {
 	if [ -d "build" ]; then
-		cd build
+		cd build || exit
 		make clean
 		exit 0
 	else
@@ -40,7 +40,7 @@ help_msg() {
 }
 
 check_options() {
-	if [ -z $* ]; then
+	if [ -z "$*" ]; then
 		release
 		exit 0
 	fi
