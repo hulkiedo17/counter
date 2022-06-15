@@ -81,10 +81,13 @@ void help(void)
 	fprintf(stdout, "\t-v (--verbose)      - prints files that counted\n");
 	fprintf(stdout, "\t-p (--path) [path]  - specifying another directory for counting lines in files\n");
 	fprintf(stdout, "\t-f (--file) [file]  - specifying file to count lines\n");
+	fprintf(stdout, "\t-D (--ignore-dir) [dir] - ignore specified directory\n");
 	fprintf(stdout, "\t-r (--no-recursive) - do not use files in nested directories\n");
 	fprintf(stdout, "\t-s (--no-spaces)    - do not count empty lines in files\n");
 	fprintf(stdout, "\t-z (--no-zero)      - do not show empty files\n");
 	fprintf(stdout, "\t-t (--no-total)     - do not show total lines count of files\n");
+	fprintf(stdout, "\t-t (--no-total)     - do not show total lines count of files\n");
+	fprintf(stdout, "\t-e (--no-env)       - do not use environment variables\n");
 
 	fprintf(stdout, "\n");
 }

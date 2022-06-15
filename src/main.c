@@ -4,8 +4,10 @@
 #include <stdbool.h>
 #include "../include/misc.h"
 #include "../include/count.h"
+#include "../include/check.h"
 
 bool no_total = false;
+bool no_env = false;
 
 int main(int argc, char* argv[])
 {
@@ -13,7 +15,7 @@ int main(int argc, char* argv[])
 	size_t count = 0;
 	char* default_path = NULL;
 	
-	const char* short_opt = "hp:vrsztf:";
+	const char* short_opt = "hp:vrsztf:eD:";
 	const struct option long_opt[] = 
 	{
 		{"help", no_argument, NULL, 'h'},
@@ -24,6 +26,8 @@ int main(int argc, char* argv[])
 		{"no-zero", no_argument, NULL, 'z'},
 		{"no-total", no_argument, NULL, 't'},
 		{"file", required_argument, NULL, 'f'},
+		{"no-env", no_argument, NULL, 'e'},
+		{"ignore-dir", required_argument, NULL, 'D'},
 		{NULL, 0, NULL, 0}
 	};
 
@@ -49,7 +53,13 @@ int main(int argc, char* argv[])
 				no_total = true;
 				break;
 			case 'f':
-				source_file = duplicate_string(optarg);	// TODO:
+				source_file = duplicate_string(optarg);
+				break;
+			case 'e':
+				no_env = true;
+				break;
+			case 'D':
+				ignore_directory = duplicate_string(optarg);
 				break;
 			case 'h':
 				help();
@@ -57,12 +67,18 @@ int main(int argc, char* argv[])
 				break;
 			case 'p':
 				free(default_path);
-				default_path = duplicate_string(optarg);	// TODO:
+				default_path = duplicate_string(optarg);
 				break;
 			default:
 				fprintf(stderr, "unknown option -\'%c\'\n", result);
 				break;
 		}
+	}
+
+	if(!no_env)
+	{
+		environment_dir_patterns = getenv("DIR_PATTERN_COUNTER");
+		environment_file_patterns = getenv("FILE_PATTERN_COUNTER");
 	}
 
 	count = count_lines(default_path);
