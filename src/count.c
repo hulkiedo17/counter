@@ -120,7 +120,7 @@ size_t count_lines(const char* path)
 		if(is_file(source_file) && check_file(source_file))
 			count += count_lines_in_file(source_file);
 		else
-			fprintf(stderr, "error: invalid file - %s\n", __func__);
+			fail(stderr, "error: invalid file - %s\n", __func__);
 		
 		return count;
 	}

@@ -52,6 +52,7 @@ char* concatenate_path_and_name(const char* path, const char* filename)
 
 	if(path[path_len - 2] != '/')
 	{
+		// TODO: fix this assignment.
 		full_path[path_len - 1] = '/';
 		strncpy(full_path + path_len, filename, filename_len);
 	}
