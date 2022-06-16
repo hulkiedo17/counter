@@ -42,5 +42,17 @@ also, you can check build options, by typing -h to build script:
 $ ./build.sh -h
 ```
 
+## environment variables
+
+you can also specify environment variables to specify file and directory comparsion patterns.
+
+examples:
+```shell
+# if the name of the directory or part of it matches the pattern, it is skipped
+export DIR_PATTERN_COUNTER=".|build|bin"
+# if the file name of part of it does NOT match the pattern, it is skipped
+export FILE_PATTERN_COUNTER=".c|.h|.sh|.mk"
+```
+
 ## docs
 you can check documentation to build options or command options in docs/ in files: build.md, cmake.md, counter.md
