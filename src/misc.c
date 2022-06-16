@@ -41,24 +41,27 @@ char* concatenate_path_and_name(const char* path, const char* filename)
 	size_t filename_len = 0;
 	char* full_path = NULL;
 
-	path_len = strlen(path) + 1;
-	filename_len = strlen(filename) + 1;
+	path_len = strlen(path);
+	filename_len = strlen(filename);
 
-	full_path = malloc((path_len + filename_len) * sizeof(char));
-	if(full_path == NULL)
-		fail(stderr, "error: allocation failed - %s\n", __func__);
-
-	strncpy(full_path, path, path_len);
-
-	if(path[path_len - 2] != '/')
+	if(path[path_len - 1] != '/')
 	{
-		// TODO: fix this assignment.
-		full_path[path_len - 1] = '/';
-		strncpy(full_path + path_len, filename, filename_len);
+		full_path = calloc((path_len + filename_len + 1) + 1, sizeof(char));
+		if(full_path == NULL)
+			fail(stderr, "error: allocation failed - %s\n", __func__);
+
+		strncpy(full_path, path, path_len);
+		full_path[path_len] = '/';
+		strncpy(full_path + path_len + 1, filename, filename_len);
 	}
 	else
 	{
-		strncpy(full_path + path_len - 1, filename, filename_len);
+		full_path = calloc((path_len + filename_len) + 1, sizeof(char));
+		if(full_path == NULL)
+			fail(stderr, "error: allocation failed - %s\n", __func__);
+
+		strncpy(full_path, path, path_len);
+		strncpy(full_path + path_len, filename, filename_len);
 	}
 
 	return full_path;
