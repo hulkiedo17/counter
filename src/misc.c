@@ -79,19 +79,18 @@ char* get_work_dir(void)
 
 void help(void)
 {
-	fprintf(stdout, "Usage: countloc [options...]\n");
+	fprintf(stdout, "Usage: counter [options...]\n");
 	fprintf(stdout, "options:\n");
-	fprintf(stdout, "\t-h (--help)         - prints this help message\n");
-	fprintf(stdout, "\t-v (--verbose)      - prints files that counted\n");
-	fprintf(stdout, "\t-p (--path) [path]  - specifying another directory for counting lines in files\n");
-	fprintf(stdout, "\t-f (--file) [file]  - specifying file to count lines\n");
-	fprintf(stdout, "\t-D (--ignore-dir) [dir] - ignore specified directory\n");
-	fprintf(stdout, "\t-r (--no-recursive) - do not use files in nested directories\n");
-	fprintf(stdout, "\t-s (--no-spaces)    - do not count empty lines in files\n");
-	fprintf(stdout, "\t-z (--no-zero)      - do not show empty files\n");
-	fprintf(stdout, "\t-t (--no-total)     - do not show total lines count of files\n");
-	fprintf(stdout, "\t-t (--no-total)     - do not show total lines count of files\n");
-	fprintf(stdout, "\t-e (--no-env)       - do not use environment variables\n");
+	fprintf(stdout, "\t-h        - prints this help message\n");
+	fprintf(stdout, "\t-v        - prints files that counted\n");
+	fprintf(stdout, "\t-p [path] - specifying another directory for counting lines in files\n");
+	fprintf(stdout, "\t-f [file] - specifying file to count lines\n");
+	fprintf(stdout, "\t-D [dir]  - ignore specified directory\n");
+	fprintf(stdout, "\t-r        - do not use files in nested directories\n");
+	fprintf(stdout, "\t-s        - do not count empty lines in files\n");
+	fprintf(stdout, "\t-z        - do not show empty files\n");
+	fprintf(stdout, "\t-t        - do not show total lines count of files\n");
+	fprintf(stdout, "\t-e        - do not use environment variables from config file\n");
 
 	fprintf(stdout, "\n");
 }

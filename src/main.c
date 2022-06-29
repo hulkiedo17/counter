@@ -15,8 +15,8 @@ int main(int argc, char* argv[])
 	size_t count = 0;
 	char* default_path = NULL;
 	
-	const char* short_opt = "hp:vrsztf:eD:";
-	const struct option long_opt[] = 
+	//const char* short_opt = "hp:vrsztf:eD:";
+	/*const struct option long_opt[] = 
 	{
 		{"help", no_argument, NULL, 'h'},
 		{"path", required_argument, NULL, 'p'},
@@ -29,11 +29,12 @@ int main(int argc, char* argv[])
 		{"no-env", no_argument, NULL, 'e'},
 		{"ignore-dir", required_argument, NULL, 'D'},
 		{NULL, 0, NULL, 0}
-	};
+	};*/
 
 	default_path = get_work_dir();
 
-	while((result = getopt_long(argc, argv, short_opt, long_opt, NULL)) != -1)
+	//while((result = getopt_long(argc, argv, short_opt, long_opt, NULL)) != -1)
+	while((result = getopt(argc, argv, "hp:vrsztf:eD:")) != -1)
 	{
 		switch(result)
 		{
