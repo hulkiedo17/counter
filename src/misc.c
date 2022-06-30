@@ -90,7 +90,7 @@ void help(void)
 	fprintf(stdout, "\t-s        - do not count empty lines in files\n");
 	fprintf(stdout, "\t-z        - do not show empty files\n");
 	fprintf(stdout, "\t-t        - do not show total lines count of files\n");
-	fprintf(stdout, "\t-e        - do not use environment variables from config file\n");
+	fprintf(stdout, "\t-e        - do not use global environment variables\n");
 
 	fprintf(stdout, "\n");
 }

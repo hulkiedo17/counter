@@ -48,9 +48,9 @@ you can also specify environment variables to specify file and directory compars
 
 examples:
 ```shell
-# if the name of the directory or part of it matches the pattern, it is skipped
+# in this var you specify the names of directories that are skipped, and separating this with '|' character
 export DIR_PATTERN_COUNTER=".|build|bin"
-# if the file name of part of it does NOT match the pattern, it is skipped
+# in this var you specify the file extensions or their names and only they will participate in the count, separating the, with '|' symbol.
 export FILE_PATTERN_COUNTER=".c|.h|.sh|.mk"
 ```
 
