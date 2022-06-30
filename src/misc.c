@@ -34,7 +34,7 @@ char* str_dup(const char *str)
 
 	len = strlen(str) + 1;
 
-	dup_s = calloc(length, sizeof(char));
+	dup_s = calloc(len, sizeof(char));
 	if(dup_s == NULL)
 		p_error("error: %s: allocation failed\n", __func__);
 

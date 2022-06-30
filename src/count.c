@@ -21,12 +21,12 @@ static char* read_line_from_file(FILE *fp)
 	assert(fp != NULL);
 
 	int c;
-	size_t position = 0;
-	size_t line_length = LINE_SIZE;
-	char *line_buffer = NULL;
+	size_t pos = 0;
+	size_t len = LINE_SIZE;
+	char *buf = NULL;
 
-	line_buffer = calloc(line_length, sizeof(char));
-	if(line_buffer == NULL) 
+	buf = calloc(len, sizeof(char));
+	if(buf == NULL) 
 		p_error("error: %s: allocation failed\n", __func__);
 
 	while(1)
@@ -35,32 +35,28 @@ static char* read_line_from_file(FILE *fp)
 
 		if(c == '\n')
 		{
-			line_buffer[position] = '\0';
-			return line_buffer;
+			buf[pos] = '\0';
+			return buf;
 		}
 		else if(c == EOF)
 		{
-			if(position != 0)
+			if(pos != 0)
 			{
-				line_buffer[position] = '\0';
-				return line_buffer;
+				buf[pos] = '\0';
+				return buf;
 			}
 
-			free(line_buffer);
+			free(buf);
 			return NULL;
 		}
-		else
-		{
-			line_buffer[position] = c;
-		}
 
-		position++;
+		buf[pos++] = c;
 
-		if(position >= line_length)
+		if(pos >= len)
 		{
-			line_length += LINE_SIZE;
-			line_buffer = realloc(line_buffer, line_length);
-			if(line_buffer == NULL)
+			len += LINE_SIZE;
+			buf = realloc(buf, len);
+			if(buf == NULL)
 				p_error("error: %s: allocation failed\n", __func__);
 		}
 	}
@@ -68,27 +64,27 @@ static char* read_line_from_file(FILE *fp)
 	return NULL;
 }
 
-static size_t count_lines_in_file(const char *filepath)
+static size_t count_lines_in_file(const char *path)
 {
-	assert(filepath != NULL);
+	assert(path != NULL);
 
 	size_t count = 0;
-	char *buffer = NULL;
+	char *buf = NULL;
 	FILE *fp = NULL;
 
-	if(filepath == NULL)
+	if(path == NULL)
 		p_error("error: %s: the function argument was passed the NULL value\n", __func__);
 
-	fp = fopen(filepath, "r");
+	fp = fopen(path, "r");
 
-	while((buffer = read_line_from_file(fp)) != NULL)
+	while((buf = read_line_from_file(fp)) != NULL)
 	{
 		if(!no_spaces)
 			count++;
-		else if(no_spaces && (buffer[0] != '\0'))
+		else if(no_spaces && (buf[0] != '\0'))
 			count++;
 
-		free(buffer);
+		free(buf);
 	}
 	
 	fclose(fp);
@@ -96,9 +92,9 @@ static size_t count_lines_in_file(const char *filepath)
 	if(verbose_flag)
 	{
 		if(no_zero && (count > 0)) 
-			fprintf(stdout, "%s = %zd\n", filepath, count);
+			fprintf(stdout, "%s = %zd\n", path, count);
 		else if(!no_zero)
-			fprintf(stdout, "%s = %zd\n", filepath, count);
+			fprintf(stdout, "%s = %zd\n", path, count);
 	}
 
 	return count;

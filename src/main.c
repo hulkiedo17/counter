@@ -37,20 +37,20 @@ int main(int argc, char *argv[])
 				no_total = true;
 				break;
 			case 'f':
-				source_file = duplicate_string(optarg);
+				source_file = str_dup(optarg);
 				break;
 			case 'e':
 				no_env = true;
 				break;
 			case 'D':
-				ignore_directory = duplicate_string(optarg);
+				ignore_dir = str_dup(optarg);
 				break;
 			case 'h':
 				help();
 				break;
 			case 'p':
 				free(default_path);
-				default_path = duplicate_string(optarg);
+				default_path = str_dup(optarg);
 				break;
 			default:
 				p_warn("unknown option -\'%c\'\n", result);
@@ -60,8 +60,8 @@ int main(int argc, char *argv[])
 
 	if(!no_env)
 	{
-		environment_dir_patterns = getenv("DIR_PATTERN_COUNTER");
-		environment_file_patterns = getenv("FILE_PATTERN_COUNTER");
+		env_dir_patterns = getenv("DIR_PATTERN_COUNTER");
+		env_file_patterns = getenv("FILE_PATTERN_COUNTER");
 	}
 
 	count = count_lines(default_path);
@@ -75,6 +75,6 @@ int main(int argc, char *argv[])
 
 	free(default_path);
 	free(source_file);
-	free(ignore_directory);
+	free(ignore_dir);
 	return 0;
 }

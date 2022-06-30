@@ -1,9 +1,9 @@
 #ifndef CHECK_H
 #define CHECK_H
 
-extern const char *environment_dir_patterns;
-extern const char *environment_file_patterns;
-extern char *ignore_directory;
+extern const char *env_dir_patterns;
+extern const char *env_file_patterns;
+extern char *ignore_dir;
 
 bool is_file(const char *path);
 bool is_dir(const char *path);

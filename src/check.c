@@ -9,10 +9,10 @@
 #include <libgen.h>
 #include "../include/misc.h"
 
-const char *environment_dir_patterns = NULL;
-const char *environment_file_patterns = NULL;
+const char *env_dir_patterns = NULL;
+const char *env_file_patterns = NULL;
 
-char *ignore_directory = NULL;
+char *ignore_dir = NULL;
 
 static const char *const default_dir_patterns = ".|build|bin";
 static const char *const default_file_patterns = ".c|.h|.sh|.txt|Makefile";
@@ -78,24 +78,24 @@ bool check_dir(const char *dir)
 	assert(dir != NULL);
 
 	if(dir == NULL)
-		p_error(stderr, "error: %s: the function argument was passed NULL value\n", __func__);
+		p_error("error: %s: the function argument was passed NULL value\n", __func__);
 
-	if(ignore_directory != NULL)
+	if(ignore_dir != NULL)
 	{
-		char *dup_ignore_dir = duplicate_string(ignore_directory);
-		const char *ignore_dir_name = basename(dup_ignore_dir);
+		char *dup_dir = str_dup(ignore_dir);
+		const char *name = basename(dup_dir);
 
-		if(strcmp(dir, ignore_dir_name) == 0)
+		if(strcmp(dir, name) == 0)
 		{
-			free(dup_ignore_dir);
+			free(dup_dir);
 			return false;
 		}
 
-		free(dup_ignore_dir);
+		free(dup_dir);
 	}
 
-	if(environment_dir_patterns != NULL)
-		return !check_pattern(dir, environment_dir_patterns);
+	if(env_dir_patterns != NULL)
+		return !check_pattern(dir, env_dir_patterns);
 
 	return !check_pattern(dir, default_dir_patterns);
 }
@@ -105,10 +105,10 @@ bool check_file(const char *file)
 	assert(file != NULL);
 
 	if(file == NULL)
-		fail(stderr, "error: the function argument was passed NULL value - %s\n", __func__);
+		p_error("error: %s: the function argument was passed NULL value\n", __func__);
 
-	if(environment_file_patterns != NULL)
-		return check_pattern(file, environment_file_patterns);
+	if(env_file_patterns != NULL)
+		return check_pattern(file, env_file_patterns);
 
 	return check_pattern(file, default_file_patterns);
 }
