@@ -43,36 +43,36 @@ char* str_dup(const char *str)
 	return dup_s;
 }
 
-char* concatenate_path_and_name(const char *path, const char *filename)
+char* concatenate_path_and_name(const char *path, const char *name)
 {
 	assert(path != NULL);
-	assert(filename != NULL);
+	assert(name != NULL);
 
 	size_t path_len = 0;
-	size_t filename_len = 0;
+	size_t name_len = 0;
 	char *full_path = NULL;
 
 	path_len = strlen(path);
-	filename_len = strlen(filename);
+	name_len = strlen(name);
 
 	if(path[path_len - 1] != '/')
 	{
-		full_path = calloc((path_len + filename_len + 1) + 1, sizeof(char));
+		full_path = calloc((path_len + name_len + 1) + 1, sizeof(char));
 		if(full_path == NULL)
 			p_error("error: %s: allocation failed\n", __func__);
 
 		strncpy(full_path, path, path_len);
 		full_path[path_len] = '/';
-		strncpy(full_path + path_len + 1, filename, filename_len);
+		strncpy(full_path + path_len + 1, name, name_len);
 	}
 	else
 	{
-		full_path = calloc((path_len + filename_len) + 1, sizeof(char));
+		full_path = calloc((path_len + name_len) + 1, sizeof(char));
 		if(full_path == NULL)
 			p_error("error: %s: allocation failed\n", __func__);
 
 		strncpy(full_path, path, path_len);
-		strncpy(full_path + path_len, filename, filename_len);
+		strncpy(full_path + path_len, name, name_len);
 	}
 
 	return full_path;
