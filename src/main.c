@@ -9,11 +9,11 @@
 bool no_total = false;
 bool no_env = false;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	int result = -1;
 	size_t count = 0;
-	char* default_path = NULL;
+	char *default_path = NULL;
 	
 	default_path = get_work_dir();
 
@@ -47,14 +47,13 @@ int main(int argc, char* argv[])
 				break;
 			case 'h':
 				help();
-				exit(EXIT_SUCCESS);
 				break;
 			case 'p':
 				free(default_path);
 				default_path = duplicate_string(optarg);
 				break;
 			default:
-				fprintf(stderr, "unknown option -\'%c\'\n", result);
+				p_warn("unknown option -\'%c\'\n", result);
 				break;
 		}
 	}
@@ -76,5 +75,6 @@ int main(int argc, char* argv[])
 
 	free(default_path);
 	free(source_file);
+	free(ignore_directory);
 	return 0;
 }

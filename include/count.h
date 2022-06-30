@@ -1,13 +1,13 @@
 #ifndef COUNT_H
 #define COUTN_H
 
-extern char* source_file;
+extern char *source_file;
 
 extern bool verbose_flag;
 extern bool no_recursive_flag;
 extern bool no_spaces;
 extern bool no_zero;
 
-size_t count_lines(const char* path);
+size_t count_lines(const char *path);
 
 #endif

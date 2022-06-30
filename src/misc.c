@@ -6,40 +6,51 @@
 #include <assert.h>
 #include <stdbool.h>
 
-void fail(FILE* out, const char* fmt, ...)
+void p_error(const char *fmt, ...)
 {
 	va_list ap;
 
 	va_start(ap, fmt);
-	vfprintf(out, fmt, ap);
+	vfprintf(stderr, fmt, ap);
 	va_end(ap);
 
 	exit(EXIT_FAILURE);
 }
 
-char* duplicate_string(const char* string)
+void p_warn(const char *fmt, ...)
 {
-	assert(string != NULL);
-
-	size_t length = strlen(string) + 1;
-
-	char* dup_string = calloc(length, sizeof(char));
-	if(dup_string == NULL)
-		fail(stderr, "error: allocation failed - %s\n", __func__);
-
-	memcpy(dup_string, string, length);
-
-	return dup_string;
+	va_list ap;
+	va_start(ap, fmt);
+	vfprintf(stderr, fmt, ap);
+	va_end(ap);
 }
 
-char* concatenate_path_and_name(const char* path, const char* filename)
+char* str_dup(const char *str)
+{
+	assert(str != NULL);
+
+	size_t len = (size_t)0;
+	char *dup_s = NULL;
+
+	len = strlen(str) + 1;
+
+	dup_s = calloc(length, sizeof(char));
+	if(dup_s == NULL)
+		p_error("error: %s: allocation failed\n", __func__);
+
+	memcpy(dup_s, str, len);
+
+	return dup_s;
+}
+
+char* concatenate_path_and_name(const char *path, const char *filename)
 {
 	assert(path != NULL);
 	assert(filename != NULL);
 
 	size_t path_len = 0;
 	size_t filename_len = 0;
-	char* full_path = NULL;
+	char *full_path = NULL;
 
 	path_len = strlen(path);
 	filename_len = strlen(filename);
@@ -48,7 +59,7 @@ char* concatenate_path_and_name(const char* path, const char* filename)
 	{
 		full_path = calloc((path_len + filename_len + 1) + 1, sizeof(char));
 		if(full_path == NULL)
-			fail(stderr, "error: allocation failed - %s\n", __func__);
+			p_error("error: %s: allocation failed\n", __func__);
 
 		strncpy(full_path, path, path_len);
 		full_path[path_len] = '/';
@@ -58,7 +69,7 @@ char* concatenate_path_and_name(const char* path, const char* filename)
 	{
 		full_path = calloc((path_len + filename_len) + 1, sizeof(char));
 		if(full_path == NULL)
-			fail(stderr, "error: allocation failed - %s\n", __func__);
+			p_error("error: %s: allocation failed\n", __func__);
 
 		strncpy(full_path, path, path_len);
 		strncpy(full_path + path_len, filename, filename_len);
@@ -69,10 +80,10 @@ char* concatenate_path_and_name(const char* path, const char* filename)
 
 char* get_work_dir(void)
 {
-	char* path = NULL;
+	char *path = NULL;
 
 	if((path = getcwd(NULL, 0)) == NULL)
-		fail(stderr, "error: getcwd failed - %s\n", __func__);
+		p_error("error: %s: getcwd failed\n", __func__);
 
 	return path;
 }
@@ -85,7 +96,7 @@ void help(void)
 	fprintf(stdout, "\t-v        - prints files that counted\n");
 	fprintf(stdout, "\t-p [path] - specifying another directory for counting lines in files\n");
 	fprintf(stdout, "\t-f [file] - specifying file to count lines\n");
-	fprintf(stdout, "\t-D [dir]  - ignore specified directory\n");
+	fprintf(stdout, "\t-D [dir]  - ignore specified directory (directory path will be discarded)\n");
 	fprintf(stdout, "\t-r        - do not use files in nested directories\n");
 	fprintf(stdout, "\t-s        - do not count empty lines in files\n");
 	fprintf(stdout, "\t-z        - do not show empty files\n");
@@ -93,4 +104,6 @@ void help(void)
 	fprintf(stdout, "\t-e        - do not use global environment variables\n");
 
 	fprintf(stdout, "\n");
+
+	exit(EXIT_FAILURE);
 }

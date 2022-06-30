@@ -6,7 +6,7 @@ options:
 - -v        - prints files that counted
 - -p [path] - specifying another directory for counting lines in files
 - -f [file] - specifying file to count lines
-- -D [dir]  - ignore specifed directory
+- -D [dir]  - ignore specifed directory (directory path will be discarded)
 - -r        - do not use files in nested directories
 - -s        - do not count the empty lines in files
 - -z        - do not show emply files
