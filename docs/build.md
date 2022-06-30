@@ -1,11 +1,8 @@
 # build.sh reference
 
 script options:
-- -d - compile debug version
-- -r - compile release version
-- -i - install debug or release version
-- -D - compile and install debug version
-- -R - compile and install release version
+- -d - compile and install debug version
+- -r - compile and install release version
 - -c - delete compiled object files
 - -h - print help message
 
