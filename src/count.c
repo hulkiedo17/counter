@@ -76,6 +76,8 @@ static size_t count_lines_in_file(const char *path)
 		p_error("error: %s: the function argument was passed the NULL value\n", __func__);
 
 	fp = fopen(path, "r");
+	if(fp == NULL)
+		p_error("error: %s: fopen failed, cannot open file\n", __func__);
 
 	while((buf = read_line_from_file(fp)) != NULL)
 	{

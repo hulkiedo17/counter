@@ -1,5 +1,7 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <getopt.h>
 #include <stdbool.h>
 #include "../include/misc.h"
@@ -37,20 +39,20 @@ int main(int argc, char *argv[])
 				no_total = true;
 				break;
 			case 'f':
-				source_file = str_dup(optarg);
+				source_file = strdup(optarg);
 				break;
 			case 'e':
 				no_env = true;
 				break;
 			case 'D':
-				ignore_dir = str_dup(optarg);
+				ignore_dir = strdup(optarg);
 				break;
 			case 'h':
 				help();
 				break;
 			case 'p':
 				free(default_path);
-				default_path = str_dup(optarg);
+				default_path = strdup(optarg);
 				break;
 			default:
 				p_warn("unknown option -\'%c\'\n", result);

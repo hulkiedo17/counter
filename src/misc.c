@@ -25,24 +25,6 @@ void p_warn(const char *fmt, ...)
 	va_end(ap);
 }
 
-char* str_dup(const char *str)
-{
-	assert(str != NULL);
-
-	size_t len = (size_t)0;
-	char *dup_s = NULL;
-
-	len = strlen(str) + 1;
-
-	dup_s = calloc(len, sizeof(char));
-	if(dup_s == NULL)
-		p_error("error: %s: allocation failed\n", __func__);
-
-	memcpy(dup_s, str, len);
-
-	return dup_s;
-}
-
 char* concatenate_path_and_name(const char *path, const char *name)
 {
 	assert(path != NULL);

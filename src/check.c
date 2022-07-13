@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,7 +26,7 @@ static bool check_pattern(const char *source, const char *pattern)
 	char *dup_pattern = NULL;
 	char *token = NULL;
 
-	dup_pattern = str_dup(pattern);
+	dup_pattern = strdup(pattern);
 
 	token = strtok(dup_pattern, "|");
 	while(token != NULL)
@@ -82,7 +83,7 @@ bool check_dir(const char *dir)
 
 	if(ignore_dir != NULL)
 	{
-		char *dup_dir = str_dup(ignore_dir);
+		char *dup_dir = strdup(ignore_dir);
 		const char *name = basename(dup_dir);
 
 		if(strcmp(dir, name) == 0)
