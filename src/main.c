@@ -4,9 +4,9 @@
 #include <string.h>
 #include <getopt.h>
 #include <stdbool.h>
-#include "../include/misc.h"
-#include "../include/count.h"
-#include "../include/check.h"
+#include "misc.h"
+#include "count.h"
+#include "check.h"
 
 bool no_total = false;
 bool no_env = false;

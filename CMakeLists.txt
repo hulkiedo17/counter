@@ -10,12 +10,15 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 	set(CMAKE_C_FLAGS_RELEASE "-std=c2x -O1")
 endif()
 
-set(BIN_DIR /bin)
-set(SOURCE src/check.c src/count.c src/main.c src/misc.c)
-set(HEADER include/check.h include/count.h include/misc.h)
 set(EXECUTABLE counter)
+set(SOURCE
+	src/check.c
+	src/count.c
+	src/main.c
+	src/misc.c)
 
-add_executable(${EXECUTABLE} ${HEADER} ${SOURCE})
+add_executable(${EXECUTABLE} ${SOURCE})
 
-INSTALL_TARGETS(/bin ${EXECUTABLE})
+target_include_directories(${EXECUTABLE} PRIVATE include/)
 
+install(TARGETS ${EXECUTABLE} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)

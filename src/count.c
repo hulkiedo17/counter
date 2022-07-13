@@ -4,8 +4,8 @@
 #include <dirent.h>
 #include <assert.h>
 #include <stdbool.h>
-#include "../include/misc.h"
-#include "../include/check.h"
+#include "misc.h"
+#include "check.h"
 
 #define LINE_SIZE 256
 

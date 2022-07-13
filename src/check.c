@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <libgen.h>
-#include "../include/misc.h"
+#include "misc.h"
 
 const char *env_dir_patterns = NULL;
 const char *env_file_patterns = NULL;
