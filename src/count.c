@@ -10,7 +10,7 @@
 
 char *source_file = NULL;
 
-bool verbose_flag = false;
+bool output_flag = false;
 bool no_recursive_flag = false;
 bool no_spaces = false;
 bool no_zero = false;
@@ -40,7 +40,7 @@ static size_t count_lines_in_file(const char *path)
 	free(buf);
 	fclose(fp);
 
-	if(verbose_flag)
+	if(output_flag)
 	{
 		if(no_zero && (count > 0)) 
 			fprintf(stdout, "%s = %zd\n", path, count);

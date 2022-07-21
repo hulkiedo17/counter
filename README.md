@@ -39,16 +39,19 @@ $ counter -h
 usage: counter [options...]
 
 options:
+	-v        - prints program version
 	-h        - prints this help message
-	-v        - prints files that counted
-	-p [path] - specifying another directory for counting lines in files
-	-f [file] - specifying file to count lines
-	-D [dir]  - ignore specifed directory (directory path will be discarded)
+	-o        - prints files and paths that counted
 	-r        - do not use files in nested directories
 	-s        - do not count the empty lines in files
 	-z        - do not show emply files
 	-t        - do not show total lines count of files
-	-e        - do not use global environment variables
+	-e        - use skip pattern from environment variables
+	-c        - use count pattern from environment variable
+	-p [path] - specifying another directory for counting lines in files
+	-f [file] - specifying file to count lines
+	-F [file] - ignore specified file (note: path to file will be discarded)
+	-D [dir]  - ignore specified directory (note: path to dir will be discarded)
 ```
 
 Also, you can check build options, by typing -h to build script:
@@ -71,9 +74,14 @@ You can also specify environment variables to specify file and directory compars
 
 Example:
 ```shell
-# in this var you specify the names of directories that are skipped, and separating this with '|' character
+# in this var you specify the names of directories that are skipped in count, and separating this with '|' symbol.
 export DIR_SKIP_COUNTER=".|build|bin"
-# in this var you specify the file extensions or their names and only they will participate in the count, separating the, with '|' symbol.
+# in this var you specify the file extensions or their names that are skipped in count, and separating this with '|' symbol.
+export FILE_SKIP_COUNTER=".md|.txt|LICENSE|.out"
+
+# in this var you specify the names of directories that and only they will participate in the count, and separating this with '|' symbol.
+export DIR_COUNT_COUNTER="src|include"
+# in this var you specify the file extensions or their names and only they will participate in the count, and separating this with '|' symbol.
 export FILE_COUNT_COUNTER=".c|.h|.sh|.mk"
 ```
 
@@ -83,8 +91,8 @@ export FILE_COUNT_COUNTER=".c|.h|.sh|.mk"
 - [x] add new options
 - [x] add config file and environment variables
 - [x] add to -D option basename() function to discard path to dir
-- [ ] add -c option which excludes configuration files from the count
-- [ ] add option to output program version
+- [ ] add -C option which excludes configuration files from the count
+- [x] add option to output program version
 - [ ] add option with excludes comments in source files from the count
 - [ ] add -V option to show only filenames and count
 

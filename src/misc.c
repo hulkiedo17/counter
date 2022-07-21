@@ -6,6 +6,8 @@
 #include <assert.h>
 #include <stdbool.h>
 
+#define PROGRAM_VERSION "1.7"
+
 void p_error(const char *fmt, ...)
 {
 	assert(fmt != NULL);
@@ -79,18 +81,22 @@ void help(void)
 {
 	fprintf(stdout, "Usage: counter [options...]\n");
 	fprintf(stdout, "options:\n");
+	fprintf(stdout, "\t-v        - prints program version\n");
 	fprintf(stdout, "\t-h        - prints this help message\n");
-	fprintf(stdout, "\t-v        - prints files that counted\n");
-	fprintf(stdout, "\t-p [path] - specifying another directory for counting lines in files\n");
-	fprintf(stdout, "\t-f [file] - specifying file to count lines\n");
-	fprintf(stdout, "\t-D [dir]  - ignore specified directory (directory path will be discarded)\n");
+	fprintf(stdout, "\t-o        - prints files and paths that counted\n");
 	fprintf(stdout, "\t-r        - do not use files in nested directories\n");
 	fprintf(stdout, "\t-s        - do not count empty lines in files\n");
 	fprintf(stdout, "\t-z        - do not show empty files\n");
 	fprintf(stdout, "\t-t        - do not show total lines count of files\n");
-	fprintf(stdout, "\t-e        - do not use global environment variables\n");
+	fprintf(stdout, "\t-e        - use skip pattern from environment variables\n");
+	fprintf(stdout, "\t-c        - use count pattern from environment variables\n");
+	fprintf(stdout, "\t-p [path] - specifying another directory for counting lines in files\n");
+	fprintf(stdout, "\t-f [file] - specifying file to count lines\n");
+	fprintf(stdout, "\t-F [file] - ignore specified file (note: path to file will be discarded)\n");
+	fprintf(stdout, "\t-D [dir]  - ignore specified directory (note: path to dir will be discarded)\n\n");
+}
 
-	fprintf(stdout, "\n");
-
-	exit(EXIT_FAILURE);
+void version(void)
+{
+	fprintf(stdout, "counter - v%s\n", PROGRAM_VERSION);
 }

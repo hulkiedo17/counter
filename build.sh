@@ -6,7 +6,7 @@ debug() {
 	mkdir -p build
 	cd build || exit
 
-	cmake "-DCMAKE_BUILD_TYPE=DEBUG" "-DCMAKE_INSTALL_PREFIX=$prefix" ".."
+	cmake "-DCMAKE_BUILD_TYPE=Debug" "-DCMAKE_INSTALL_PREFIX=$prefix" ".."
 	make
 	sudo make install
 }
@@ -15,7 +15,7 @@ release() {
 	mkdir -p build
 	cd build || exit
 
-	cmake "-DCMAKE_BUILD_TYPE=RELEASE" "-DCMAKE_INSTALL_PREFIX=$prefix" ".."
+	cmake "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX=$prefix" ".."
 	make
 	sudo make install
 }

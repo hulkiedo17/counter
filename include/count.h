@@ -3,7 +3,7 @@
 
 extern char *source_file;
 
-extern bool verbose_flag;
+extern bool output_flag;
 extern bool no_recursive_flag;
 extern bool no_spaces;
 extern bool no_zero;
