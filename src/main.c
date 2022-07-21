@@ -62,8 +62,10 @@ int main(int argc, char *argv[])
 
 	if(!no_env)
 	{
-		env_dir_patterns = getenv("DIR_PATTERN_COUNTER");
-		env_file_patterns = getenv("FILE_PATTERN_COUNTER");
+		env_dir_patterns = getenv("DIR_SKIP_COUNTER");
+		//______________ = getenv("DIR_COUNT_COUNTER");
+		//______________ = getenv("FILE_SKIP_COUNTER");
+		env_file_patterns = getenv("FILE_COUNT_COUNTER");
 	}
 
 	count = count_lines(default_path);
