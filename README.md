@@ -17,7 +17,14 @@ $ cd counter
 $ ./build.sh
 ```
 
-Or use cmake directly(check in docs/cmake.md).
+Or use cmake directly:
+```shell
+$ mkdir build && cd build
+$ # or if you want release version, change option to -DCMAKE_BUILD_TYPE=RELEASE
+$ cmake -DCMAKE_BUILD_TYPE=DEBUG -DCMAKE_INSTALL_PREFIX=/usr/local/ ..
+$ make
+$ sudo make install
+```
 
 After this steps, you can run program by typing this command:
 ```shell
