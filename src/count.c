@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,59 +17,12 @@ bool no_recursive_flag = false;
 bool no_spaces = false;
 bool no_zero = false;
 
-static char* read_line_from_file(FILE *fp)
-{
-	assert(fp != NULL);
-
-	int c;
-	size_t pos = 0;
-	size_t len = LINE_SIZE;
-	char *buf = NULL;
-
-	buf = calloc(len, sizeof(char));
-	if(buf == NULL) 
-		p_error("error: %s: allocation failed\n", __func__);
-
-	while(1)
-	{
-		c = fgetc(fp);
-
-		if(c == '\n')
-		{
-			buf[pos] = '\0';
-			return buf;
-		}
-		else if(c == EOF)
-		{
-			if(pos != 0)
-			{
-				buf[pos] = '\0';
-				return buf;
-			}
-
-			free(buf);
-			return NULL;
-		}
-
-		buf[pos++] = c;
-
-		if(pos >= len)
-		{
-			len += LINE_SIZE;
-			buf = realloc(buf, len);
-			if(buf == NULL)
-				p_error("error: %s: allocation failed\n", __func__);
-		}
-	}
-
-	return NULL;
-}
-
 static size_t count_lines_in_file(const char *path)
 {
 	assert(path != NULL);
 
 	size_t count = 0;
+	size_t nread = 0;
 	char *buf = NULL;
 	FILE *fp = NULL;
 
@@ -79,16 +33,15 @@ static size_t count_lines_in_file(const char *path)
 	if(fp == NULL)
 		p_error("error: %s: fopen failed, cannot open file\n", __func__);
 
-	while((buf = read_line_from_file(fp)) != NULL)
+	while(getline(&buf, &nread, fp) != -1)
 	{
 		if(!no_spaces)
 			count++;
 		else if(no_spaces && (buf[0] != '\0'))
 			count++;
-
-		free(buf);
 	}
 	
+	free(buf);
 	fclose(fp);
 
 	if(verbose_flag)
