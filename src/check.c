@@ -46,11 +46,9 @@ static bool check_pattern(const char *source, const char *pattern)
 
 bool is_file(const char *path)
 {
-	assert(path != NULL);
-
 	struct stat buf;
 
-	if(path == NULL)
+	if(!path)
 		p_error("error: %s: the function argument was passed NULL value\n", __func__);
 
 	if(stat(path, &buf) == 0 && S_ISREG(buf.st_mode))
@@ -61,11 +59,9 @@ bool is_file(const char *path)
 
 bool is_dir(const char *path)
 {
-	assert(path != NULL);
-
 	struct stat buf;
 
-	if(path == NULL)
+	if(!path)
 		p_error("error: %s: the function argument was passed NULL value\n", __func__);
 
 	if(stat(path, &buf) == 0 && S_ISDIR(buf.st_mode))
@@ -76,12 +72,10 @@ bool is_dir(const char *path)
 
 bool check_dir(const char *dir)
 {
-	assert(dir != NULL);
-
-	if(dir == NULL)
+	if(!dir)
 		p_error("error: %s: the function argument was passed NULL value\n", __func__);
 
-	if(ignore_dir != NULL)
+	if(ignore_dir)
 	{
 		char *dup_dir = strdup(ignore_dir);
 		const char *name = basename(dup_dir);
@@ -95,7 +89,7 @@ bool check_dir(const char *dir)
 		free(dup_dir);
 	}
 
-	if(env_dir_patterns != NULL)
+	if(env_dir_patterns)
 		return !check_pattern(dir, env_dir_patterns);
 
 	return !check_pattern(dir, default_dir_patterns);
@@ -103,12 +97,10 @@ bool check_dir(const char *dir)
 
 bool check_file(const char *file)
 {
-	assert(file != NULL);
-
-	if(file == NULL)
+	if(!file)
 		p_error("error: %s: the function argument was passed NULL value\n", __func__);
 
-	if(env_file_patterns != NULL)
+	if(env_file_patterns)
 		return check_pattern(file, env_file_patterns);
 
 	return check_pattern(file, default_file_patterns);

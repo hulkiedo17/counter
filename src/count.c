@@ -19,18 +19,16 @@ bool no_zero = false;
 
 static size_t count_lines_in_file(const char *path)
 {
-	assert(path != NULL);
-
 	size_t count = 0;
 	size_t nread = 0;
 	char *buf = NULL;
 	FILE *fp = NULL;
 
-	if(path == NULL)
+	if(!path)
 		p_error("error: %s: the function argument was passed the NULL value\n", __func__);
 
 	fp = fopen(path, "r");
-	if(fp == NULL)
+	if(!fp)
 		p_error("error: %s: fopen failed, cannot open file\n", __func__);
 
 	while(getline(&buf, &nread, fp) != -1)
@@ -57,17 +55,15 @@ static size_t count_lines_in_file(const char *path)
 
 size_t count_lines(const char *path)
 {
-	assert(path != NULL);
-
 	DIR *dir = NULL;
 	struct dirent *entry = NULL;
 	char *full_path = NULL;
 	size_t count = 0;
 
-	if(path == NULL)
+	if(!path)
 		p_error("error: %s: the function argument was passed the NULL value\n", __func__);
 
-	if(source_file != NULL)
+	if(source_file)
 	{
 		if(is_file(source_file) && check_file(source_file))
 			count += count_lines_in_file(source_file);
@@ -78,7 +74,7 @@ size_t count_lines(const char *path)
 	}
 
 	dir = opendir(path);
-	if(dir == NULL)
+	if(!dir)
 		p_error("error: %s: opendir() function failed\n", __func__);
 
 	while((entry = readdir(dir)) != NULL)

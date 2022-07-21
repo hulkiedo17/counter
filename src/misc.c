@@ -8,6 +8,8 @@
 
 void p_error(const char *fmt, ...)
 {
+	assert(fmt != NULL);
+
 	va_list ap;
 
 	va_start(ap, fmt);
@@ -19,7 +21,10 @@ void p_error(const char *fmt, ...)
 
 void p_warn(const char *fmt, ...)
 {
+	assert(fmt != NULL);
+
 	va_list ap;
+
 	va_start(ap, fmt);
 	vfprintf(stderr, fmt, ap);
 	va_end(ap);
@@ -40,7 +45,7 @@ char* concatenate_path_and_name(const char *path, const char *name)
 	if(path[path_len - 1] != '/')
 	{
 		full_path = calloc((path_len + name_len + 1) + 1, sizeof(char));
-		if(full_path == NULL)
+		if(!full_path)
 			p_error("error: %s: allocation failed\n", __func__);
 
 		strncpy(full_path, path, path_len);
@@ -50,7 +55,7 @@ char* concatenate_path_and_name(const char *path, const char *name)
 	else
 	{
 		full_path = calloc((path_len + name_len) + 1, sizeof(char));
-		if(full_path == NULL)
+		if(!full_path)
 			p_error("error: %s: allocation failed\n", __func__);
 
 		strncpy(full_path, path, path_len);
