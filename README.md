@@ -26,15 +26,37 @@ $ counter
 
 # Options
 
-Enter the -h option to check all program options(or check in docs/counter.md):
+Enter the -h option to check all program options:
 ```shell
 $ counter -h
+usage: counter [options...]
+
+options:
+	-h        - prints this help message
+	-v        - prints files that counted
+	-p [path] - specifying another directory for counting lines in files
+	-f [file] - specifying file to count lines
+	-D [dir]  - ignore specifed directory (directory path will be discarded)
+	-r        - do not use files in nested directories
+	-s        - do not count the empty lines in files
+	-z        - do not show emply files
+	-t        - do not show total lines count of files
+	-e        - do not use global environment variables
 ```
 
-Also, you can check build options, by typing -h to build script(or check in docs/build.md):
+Also, you can check build options, by typing -h to build script:
 ```shell
 $ ./build.sh -h
+usage: ./build.sh [options...]
+
+options:
+	-d - compile and install debug version
+	-r - compile and install release version
+	-c - delete compiled object files
+	-h - print help message
 ```
+
+it is recommended to use build script from the main repository directory, not a build or other nested directories.
 
 # Environment variables
 
@@ -48,10 +70,14 @@ export DIR_SKIP_COUNTER=".|build|bin"
 export FILE_COUNT_COUNTER=".c|.h|.sh|.mk"
 ```
 
-# Documentation
-
-You can check documentation to build options or command options in docs/ in files: build.md, cmake.md, counter.md.
-
 # TODO list
 
-You can see the TODO list for the near future in /docs/TODO.md.
+- [x] remake program structure
+- [x] add new options
+- [x] add config file and environment variables
+- [x] add to -D option basename() function to discard path to dir
+- [ ] add -c option which excludes configuration files from the count
+- [ ] add option to output program version
+- [ ] add option with excludes comments in source files from the count
+- [ ] add -V option to show only filenames and count
+
