@@ -8,8 +8,6 @@
 #include "misc.h"
 #include "check.h"
 
-#define LINE_SIZE 256
-
 char *source_file = NULL;
 
 bool verbose_flag = false;
