@@ -5,12 +5,12 @@ project(counter
 	DESCRIPTION "counter - code line counter in source file of C projects"
 	LANGUAGES C)
 
-if(NOT CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE Debug)
-endif()
-
 if(NOT UNIX)
 	message(FATAL_ERROR "Your system is not unix. Fail to build.")
+endif()
+
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Debug)
 endif()
 
 set(CMAKE_C_FLAGS_RELEASE "-std=c99 -O2 -DNDEBUG")
